@@ -1,7 +1,5 @@
 FROM nginx:stable-alpine:3.24
 
-USER root
-
 RUN apk add --no-cache \
     bash \
     curl \
