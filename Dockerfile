@@ -1,4 +1,4 @@
-FROM nginxinc/nginx-unprivileged:1.31.3-alpine
+FROM nginx:stable-alpine:3.24
 
 USER root
 
