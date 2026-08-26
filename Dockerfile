@@ -1,4 +1,4 @@
-FROM nginx:stable-alpine:3.24
+FROM nginx:stable-alpine
 
 RUN apk add --no-cache \
     bash \
@@ -6,11 +6,9 @@ RUN apk add --no-cache \
     htop \
     tcpdump \
     tcpflow \
-    vim \
-    && rm -rf /var/cache/apk/*
+    vim
 
 USER nginx
-
 EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
