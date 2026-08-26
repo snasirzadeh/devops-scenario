@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync ssh authorized_keys to another server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=user
+Group=user
+ExecStart=/usr/local/bin/sync-ssh-key.sh

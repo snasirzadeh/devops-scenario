@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch ssh authorized_keys
+
+[Path]
+PathChanged=/home/debian/.ssh/authorized_keys
+Unit=ssh-key-sync.service
+
+[Install]
+WantedBy=multi-user.target
