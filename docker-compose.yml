@@ -1,0 +1,54 @@
+services:
+  log-init:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "0:0"
+    command:
+      - /bin/sh
+      - -c
+      - chown -R nginx:nginx /var/log/nginx
+    network_mode: none
+    volumes:
+      - type: bind
+        source: ./logs
+        target: /var/log/nginx
+    restart: "no"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      log-init:
+        condition: service_completed_successfully
+    ports:
+      - "80:8080"
+    volumes:
+      - type: bind
+        source: ./html
+        target: /usr/share/nginx/html
+        read_only: true
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+      - type: bind
+        source: ./logs
+        target: /var/log/nginx
+    networks:
+      - web-internal
+    read_only: true
+    tmpfs:
+      - /tmp
+      # The unprivileged nginx image runs as UID/GID 101. Docker otherwise
+      # creates this tmpfs as root:root, preventing nginx from creating its
+      # client_temp and other runtime cache directories.
+      - /var/cache/nginx:uid=101,gid=101,mode=0750
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+networks:
+  web-internal:
+    driver: bridge
