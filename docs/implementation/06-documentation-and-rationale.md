@@ -1,7 +1,5 @@
 # Documentation & Rationale — Implementation
 
-[Documentation index](../README.md) · [Approach](../approach/06-documentation-and-rationale.md)
-
 This page is the final repository, reproduction, and handover checklist. The
 paired approach page records the key architectural decisions.
 

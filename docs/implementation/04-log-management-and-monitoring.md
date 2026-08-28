@@ -1,7 +1,5 @@
 # Log Management & Monitoring — Implementation
 
-[Documentation index](../README.md) · [Approach](../approach/04-log-management-and-monitoring.md)
-
 This section deploys the policy in `logrotate/nginx-docker` and the daily
 monitoring job under `monitoring/`. Complete the path and identity normalization
 in the docs index before copying any unit or policy into the host OS.

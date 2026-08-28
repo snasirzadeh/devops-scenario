@@ -1,7 +1,5 @@
 # Docker Compose & Mounts — Implementation
 
-[Documentation index](../README.md) · [Approach](../approach/03-docker-compose-and-mounts.md)
-
 `docker-compose.yml` builds the local image, maps host port 80 to container port
 8080, and bind-mounts the site, Nginx configuration, and logs from the host.
 

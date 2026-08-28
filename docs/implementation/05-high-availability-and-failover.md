@@ -1,7 +1,5 @@
 # High Availability & Failover — Implementation
 
-[Documentation index](../README.md) · [Approach](../approach/05-high-availability-and-failover.md)
-
 The repository uses Keepalived and VRRP to move `192.168.1.10/24` between two
 hosts. Node 1 normally owns the VIP. Its health script makes an HTTP request to
 the locally published Nginx port, so both a stopped Docker service and an

@@ -1,7 +1,5 @@
 # Infrastructure & OS Setup — Implementation
 
-[Documentation index](../README.md) · [Approach](../approach/01-infrastructure-and-os-setup.md)
-
 This runbook provisions both Debian 13 (Trixie) VMs, creates a dedicated LVM
 logical volume for `/var/lib`, configures the `debian` administrator, hardens
 SSH, installs the base OS and security packages, and installs Docker Engine.
@@ -26,7 +24,7 @@ Complete the installer as follows:
 The added data disk is configured after the first boot so it cannot be confused
 with the installer target.
 
-## 2. Configure package sources and administrator access
+## 2. Configure package sources
 
 Become root for the initial setup because `sudo` is not installed yet:
 
@@ -55,13 +53,27 @@ Disable the installer ISO (`deb cdrom:`) entry. Also check files below
 deb822 `.sources` file.
 
 ```bash
-nano /etc/apt/sources.list
+vim /etc/apt/sources.list
 apt update
-apt install -y sudo
+```
+
+Keep the root shell open for the initial OS setup.
+
+## 3. Apply the initial OS baseline and administrator access
+
+While still logged in as root, upgrade the OS and install the baseline packages:
+
+```bash
+apt full-upgrade -y
+apt autoremove -y
+apt autoclean
+apt install -y --no-install-recommends \
+  ca-certificates curl fail2ban iptables iptables-persistent qemu-guest-agent \
+  rsync sudo systemd-timesyncd util-linux-extra vim
 usermod -aG sudo debian
 ```
 
-Edit the main `/etc/sudoers` file safely:
+Edit the main `/etc/sudoers` file safely with `visudo`:
 
 ```bash
 visudo -f /etc/sudoers
@@ -73,35 +85,20 @@ Add the following line:
 %debian ALL=(ALL:ALL) NOPASSWD: ALL
 ```
 
-The leading `%` applies the rule to the `debian` group. Validate the complete
-sudoers configuration before leaving the root shell:
+Set the default editor:
 
 ```bash
-visudo -c
-exit
+update-alternatives --config editor
 ```
 
-Log out and back in so the new group membership takes effect, then confirm
-`sudo -n true` succeeds.
-
-## 3. Apply the initial OS baseline
+Select `vim.tiny` when prompted.
 
 ```bash
-sudo apt update
-sudo apt full-upgrade -y
-sudo apt autoremove -y
-sudo apt autoclean
-sudo apt install -y --no-install-recommends \
-  ca-certificates curl fail2ban iptables iptables-persistent qemu-guest-agent \
-  rsync systemd-timesyncd util-linux-extra vim
-sudo update-alternatives --config editor
 sudo timedatectl set-timezone Asia/Tehran
 sudo systemctl enable --now systemd-timesyncd
 sudo systemctl enable --now qemu-guest-agent
 sudo apt autoremove --purge -y
 ```
-
-Select `vim.tiny` when prompted by `update-alternatives`.
 
 Install `qemu-guest-agent` only on a QEMU/KVM-based VM. On another hypervisor,
 use its supported guest agent instead. Verify the baseline:
@@ -291,58 +288,37 @@ sudo journalctl -u ssh-key-sync.service -n 50 --no-pager
 
 ## 8. Install Docker Engine
 
-Use Docker's official Debian repository:
+Reference: [Install Docker Engine on Debian](https://docs.docker.com/engine/install/debian/#install-using-the-repository)
+
+Add Docker's official GPG key:
 
 ```bash
 sudo apt update
-sudo apt install -y ca-certificates curl
+sudo apt install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/debian/gpg \
-  -o /etc/apt/keyrings/docker.asc
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 ```
 
-Add `/etc/apt/sources.list.d/docker.sources`:
+Add the Docker repository to Apt sources:
 
-```text
+```bash
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
 Types: deb
 URIs: https://download.docker.com/linux/debian
-Suites: trixie
+Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
 Components: stable
-Architectures: amd64
+Architectures: $(dpkg --print-architecture)
 Signed-By: /etc/apt/keyrings/docker.asc
+EOF
 ```
 
-If the VM is not `amd64`, replace the architecture with the value from
-`dpkg --print-architecture`. Install and verify the packages:
+Install Docker Engine:
 
 ```bash
 sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io \
-  docker-buildx-plugin docker-compose-plugin
-sudo systemctl enable --now docker
-sudo usermod -aG docker debian
-sudo docker run --rm hello-world
-sudo docker version
-sudo docker compose version
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
-
-The `docker` group is root-equivalent. Log out and back in before testing Docker
-without `sudo`.
-
-## Acceptance checks
-
-- Both nodes boot Debian 13 without an emergency-mode or mount error.
-- Each node uses the recorded static address, gateway, and DNS server.
-- `/` is on the installer-created LVM and `/var/lib` is on the 10 GB added disk.
-- The `debian` user has the validated passwordless sudo rule.
-- SSH listens on TCP 8546; key login succeeds while root and password login fail.
-- The SSH banner appears and Fail2ban monitors port 8546.
-- Changing the managed key on Node 1 updates Node 2 and logs a successful unit.
-- The firewall survives reboot and still permits SSH, HTTP, and required VRRP.
-- Tehran time, time synchronization, and the appropriate guest agent are active.
-- Docker starts on boot, stores its state beneath the `/var/lib` mount, and the
-  operator can run Docker Compose.
 
 ## References
 

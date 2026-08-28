@@ -1,7 +1,5 @@
 # Dockerfile & Containerization — Implementation
 
-[Documentation index](../README.md) · [Approach](../approach/02-dockerfile-and-containerization.md)
-
 The root `Dockerfile` builds on `nginx:stable-alpine`, installs the requested
 diagnostic tools without caching the Alpine package index, changes ownership of
 Nginx's cache, and runs the server as the `nginx` user on port 8080.
