@@ -76,11 +76,11 @@ for automation, but it also means compromise of the account immediately grants
 root access. The sudoers file must be mode `0440`, validated with `visudo`, and
 limited to this administrative account.
 
-Remote access is stricter than console access: SSH listens on TCP 8546, rejects
-root and password logins, accepts only public keys, and displays a login banner.
-Moving SSH off port 22 reduces background scanning noise but is not an
-authentication control; key-only authentication and firewall policy provide the
-real protection.
+Remote access is stricter than console access: SSH listens on a chosen
+non-default TCP port, rejects root and password logins, accepts only public keys,
+and displays a login banner. Moving SSH off port 22 reduces background scanning
+noise but is not an authentication control; key-only authentication and
+firewall policy provide the real protection.
 
 The `docker` group is also root-equivalent because members can ask the daemon to
 mount or modify host resources. Membership must be as narrow as sudo access.
@@ -105,7 +105,7 @@ The controls address different risks:
 - Iptables limits reachable services and permits VRRP only between the two
   nodes.
 - Fail2ban watches the SSH journal and temporarily blocks repeated failures on
-  port 8546.
+  the selected SSH port.
 - Package upgrades shorten exposure to known vulnerabilities.
 - `systemd-timesyncd` keeps timestamps useful for logs and incident analysis.
 - `qemu-guest-agent` gives the hypervisor a controlled channel for VM lifecycle
@@ -138,7 +138,7 @@ package origin must be rechecked during OS upgrades.
 |---|---|
 | Wrong disk initialized as an LVM PV | Verify device name, serial, size, filesystems, and mounts from the VM console before `pvcreate` |
 | `/var/lib` migration loses or omits data | Perform it before Docker is installed, use `rsync -aHAX`, mount by UUID, and verify after reboot |
-| SSH lockout | Open TCP 8546 first, validate with `sshd -t`, and test a second key-only session before closing the first |
+| SSH lockout | Open the selected SSH port first, validate with `sshd -t`, and test a second key-only session before closing the first |
 | Passwordless sudo increases impact of account compromise | Restrict the entry to `debian`, protect SSH keys, and review access regularly |
 | Key sync removes its own access | Use a separate automation identity and test repeated key changes |
 | Firewall breaks Docker or VRRP | Allow required traffic first, test from the console, and persist only verified rules |

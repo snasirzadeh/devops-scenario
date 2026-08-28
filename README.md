@@ -9,7 +9,7 @@
 * **User & SSH Configuration:**
   * Create the non-root `debian` user with `sudo` privileges.
   * Restrict login exclusively to the provided `ssh-rsa` key.
-  * Run SSH on TCP port `8546` and disable root and password login.
+  * Run SSH on a non-default TCP port and disable root and password login.
   * Configure automatic key replication so changing the key on Node 1 updates Node 2 automatically.
 * **Hardening:** Apply best practice system hardening on both nodes (SSH, `iptables`, `fail2ban` for SSH).
 * **Docker Installation:** Install Docker Engine on both servers.

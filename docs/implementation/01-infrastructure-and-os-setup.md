@@ -168,28 +168,27 @@ the logical volume mounts automatically and the copied data is present.
 
 ## 5. Configure and harden SSH
 
-Create the administrator's key file and add the supplied public key as one
-unbroken line:
+Run `ssh-keygen` as the `debian` user to create the `.ssh` directory with its
+default permissions, then add the supplied public key to `authorized_keys` as
+one unbroken line:
 
 ```bash
-sudo install -d -m 0700 -o debian -g debian /home/debian/.ssh
-sudo touch /home/debian/.ssh/authorized_keys
-sudo chown debian:debian /home/debian/.ssh/authorized_keys
-sudo chmod 0600 /home/debian/.ssh/authorized_keys
-sudo vim /home/debian/.ssh/authorized_keys
+ssh-keygen
+vim ~/.ssh/authorized_keys
 ```
 
-Create the warning text in `/etc/ssh/banner`, protect it, then create
-`/etc/ssh/sshd_config.d/99-project-hardening.conf`:
+Create the warning text in `/etc/ssh/banner`, protect it, then edit
+`/etc/ssh/sshd_config`:
 
 ```bash
 sudo vim /etc/ssh/banner
-sudo chmod 0644 /etc/ssh/banner
-sudo vim /etc/ssh/sshd_config.d/99-project-hardening.conf
+sudo vim /etc/ssh/sshd_config
 ```
 
+Choose a non-default SSH port and replace `<SSH_PORT>` with that port:
+
 ```text
-Port 8546
+Port <SSH_PORT>
 PermitRootLogin no
 PermitEmptyPasswords no
 PasswordAuthentication no
@@ -204,22 +203,9 @@ AllowTcpForwarding no
 Banner /etc/ssh/banner
 ```
 
-An RSA public key can use modern RSA-SHA2 signatures. Do not enable the obsolete
-`ssh-rsa` signature algorithm unless a legacy client makes it unavoidable.
-
-Before reloading SSH, allow TCP 8546 in both the upstream firewall and the host
-firewall. Keep the current session open, validate the complete configuration,
-reload Debian's `ssh` service, and test from a second terminal:
-
 ```bash
-sudo sshd -t
-sudo systemctl reload ssh
-sudo ss -lntp | grep ':8546'
-ssh -p 8546 debian@192.168.1.11
+sudo systemctl restart sshd
 ```
-
-Confirm that key-only access works before removing the port 22 firewall rule.
-Also verify that root login and password login fail.
 
 ## 6. Configure Fail2ban and the firewall
 
@@ -228,7 +214,7 @@ Create `/etc/fail2ban/jail.d/sshd.local`:
 ```ini
 [sshd]
 enabled = true
-port = 8546
+port = <SSH_PORT>
 filter = sshd
 backend = systemd
 maxretry = 3
@@ -243,11 +229,11 @@ sudo fail2ban-client status sshd
 ```
 
 Build iptables rules from the VM console. At minimum, allow loopback,
-established traffic, TCP 8546, HTTP, and VRRP protocol 112 only between the two
-nodes before setting the default input policy to drop. Docker adds its own rules;
-after Docker is installed, enforce container restrictions in the `DOCKER-USER`
-chain as well. Persist only a ruleset that has passed a second-session access
-test:
+established traffic, the selected SSH port, HTTP, and VRRP protocol 112 only
+between the two nodes before setting the default input policy to drop. Docker
+adds its own rules; after Docker is installed, enforce container restrictions in
+the `DOCKER-USER` chain as well. Persist only a ruleset that has passed a
+second-session access test:
 
 ```bash
 sudo netfilter-persistent save
@@ -261,18 +247,12 @@ The repository provides:
 - `ssh-key-sync/ssh-key-sync.service`
 - `ssh-key-sync/ssh-key-sync.path`
 
-Before installing them, normalize the source and destination user, file paths,
-`User=`, `Group=`, destination address, and SSH port 8546. Node 1 also needs a
-dedicated non-interactive identity that remains trusted when the operator's
-login key changes. Do not store that automation credential in the
-`authorized_keys` file being replaced.
-
-Install the normalized files on Node 1:
+Copy the files on Node 1:
 
 ```bash
-sudo install -m 0750 ssh-key-sync/ssh-key-sync.sh /usr/local/bin/sync-ssh-key.sh
-sudo install -m 0644 ssh-key-sync/ssh-key-sync.service /etc/systemd/system/
-sudo install -m 0644 ssh-key-sync/ssh-key-sync.path /etc/systemd/system/
+sudo cp ssh-key-sync/ssh-key-sync.sh /usr/local/bin/sync-ssh-key.sh
+sudo cp ssh-key-sync/ssh-key-sync.service /etc/systemd/system/
+sudo cp ssh-key-sync/ssh-key-sync.path /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now ssh-key-sync.path
 ```
