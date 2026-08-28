@@ -7,27 +7,7 @@ logical volume for `/var/lib`, configures the `debian` administrator, hardens
 SSH, installs the base OS and security packages, and installs Docker Engine.
 Run every host step on both nodes unless it explicitly says otherwise.
 
-## 1. Record the environment
-
-Replace all examples with the real inventory before installation:
-
-| Setting | Node 1 | Node 2 |
-|---|---:|---:|
-| Hostname | `server1` | `server2` |
-| Address | `192.168.1.11/24` | `192.168.1.12/24` |
-| Gateway | `192.168.1.1` | `192.168.1.1` |
-| DNS server | site-specific | site-specific |
-| OS disk | 10 GB | 10 GB |
-| Data disk | 10 GB | 10 GB |
-| LVM volume group | `sepehrgv1` | `sepehrgv1` |
-| Administrator | `debian` | `debian` |
-| SSH port | `8546` | `8546` |
-
-Reserve `192.168.1.10/24` for the virtual IP used by the high-availability
-runbook. Confirm the VM network interface name after installation rather than
-assuming it is `ens18`.
-
-## 2. Install Debian 13 from the ISO
+## 1. Install Debian 13 from the ISO
 
 Attach the Debian 13 (Trixie) minimal ISO and choose **Graphical install**.
 Complete the installer as follows:
@@ -46,7 +26,7 @@ Complete the installer as follows:
 The added data disk is configured after the first boot so it cannot be confused
 with the installer target.
 
-## 3. Configure package sources and administrator access
+## 2. Configure package sources and administrator access
 
 Become root for the initial setup because `sudo` is not installed yet:
 
@@ -66,17 +46,23 @@ apt install -y sudo vim
 usermod -aG sudo debian
 ```
 
-Create `/etc/sudoers.d/debian` with the following exact line:
-
-```sudoers
-debian ALL=(ALL:ALL) NOPASSWD: ALL
-```
-
-Then protect and validate it before leaving the root shell:
+Edit the main `/etc/sudoers` file safely:
 
 ```bash
-chmod 0440 /etc/sudoers.d/debian
-visudo -cf /etc/sudoers.d/debian
+visudo -f /etc/sudoers
+```
+
+Add the following line:
+
+```sudoers
+%debian ALL=(ALL:ALL) NOPASSWD: ALL
+```
+
+The leading `%` applies the rule to the `debian` group. Validate the complete
+sudoers configuration before leaving the root shell:
+
+```bash
+visudo -c
 update-alternatives --config editor
 exit
 ```
@@ -84,7 +70,7 @@ exit
 Select `vim.tiny` when prompted. Log out and back in so the new group membership
 takes effect, then confirm `sudo -n true` succeeds.
 
-## 4. Apply the initial OS baseline
+## 3. Apply the initial OS baseline
 
 ```bash
 sudo apt update
@@ -110,7 +96,7 @@ systemctl is-active systemd-timesyncd
 systemctl is-active qemu-guest-agent
 ```
 
-## 5. Create the `/var/lib` logical volume
+## 4. Create the `/var/lib` logical volume
 
 Add the second 10 GB virtual disk to the powered-off VM, then boot and identify
 it from the VM console. The example uses `/dev/sdb`; device names can differ.
@@ -166,7 +152,7 @@ sudo reboot
 After reconnecting, run `findmnt /var/lib` again. Do not install Docker until
 the logical volume mounts automatically and the copied data is present.
 
-## 6. Configure and harden SSH
+## 5. Configure and harden SSH
 
 Create the administrator's key file and add the supplied public key as one
 unbroken line:
@@ -221,7 +207,7 @@ ssh -p 8546 debian@192.168.1.11
 Confirm that key-only access works before removing the port 22 firewall rule.
 Also verify that root login and password login fail.
 
-## 7. Configure Fail2ban and the firewall
+## 6. Configure Fail2ban and the firewall
 
 Create `/etc/fail2ban/jail.d/sshd.local`:
 
@@ -253,7 +239,7 @@ test:
 sudo netfilter-persistent save
 ```
 
-## 8. Configure key replication from Node 1
+## 7. Configure key replication from Node 1
 
 The repository provides:
 
@@ -286,7 +272,7 @@ sudo systemctl status ssh-key-sync.service --no-pager
 sudo journalctl -u ssh-key-sync.service -n 50 --no-pager
 ```
 
-## 9. Install Docker Engine
+## 8. Install Docker Engine
 
 Use Docker's official Debian repository:
 
