@@ -1,7 +1,5 @@
 # Docker Compose & Mounts — Approach
 
-[Documentation index](../README.md) · [Implementation](../implementation/03-docker-compose-and-mounts.md)
-
 ## Goal
 
 Keep the service definition small and repeatable while allowing operators to

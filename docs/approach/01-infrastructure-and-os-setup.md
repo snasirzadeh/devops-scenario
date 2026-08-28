@@ -1,7 +1,5 @@
 # Infrastructure & OS Setup — Approach
 
-[Documentation index](../README.md) · [Implementation](../implementation/01-infrastructure-and-os-setup.md)
-
 ## Goal
 
 Build two replaceable Debian 13 (Trixie) virtual machines with the same minimal

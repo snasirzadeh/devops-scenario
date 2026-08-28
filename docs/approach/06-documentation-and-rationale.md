@@ -1,7 +1,5 @@
 # Documentation & Rationale — Approach
 
-[Documentation index](../README.md) · [Implementation](../implementation/06-documentation-and-rationale.md)
-
 ## Documentation model
 
 The root README remains the requirements checklist and entry point. Each numbered

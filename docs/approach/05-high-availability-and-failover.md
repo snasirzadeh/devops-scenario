@@ -1,7 +1,5 @@
 # High Availability & Failover — Approach
 
-[Documentation index](../README.md) · [Implementation](../implementation/05-high-availability-and-failover.md)
-
 ## Goal
 
 Present one stable service address, prefer Node 1 during normal operation, and

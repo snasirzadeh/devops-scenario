@@ -1,7 +1,5 @@
 # Log Management & Monitoring — Approach
 
-[Documentation index](../README.md) · [Implementation](../implementation/04-log-management-and-monitoring.md)
-
 ## Goal
 
 Bound log growth, preserve recent history, produce a daily human-readable signal,

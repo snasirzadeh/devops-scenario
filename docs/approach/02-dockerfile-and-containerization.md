@@ -1,7 +1,5 @@
 # Dockerfile & Containerization — Approach
 
-[Documentation index](../README.md) · [Implementation](../implementation/02-dockerfile-and-containerization.md)
-
 ## Goal
 
 Package a predictable Nginx runtime that is small, starts without root, contains
