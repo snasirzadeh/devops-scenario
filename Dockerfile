@@ -7,6 +7,7 @@ RUN apk add --no-cache \
     tcpdump \
     tcpflow \
     vim
+RUN rm -f /etc/nginx/conf.d/default.conf
 RUN chown -R nginx:nginx /var/cache/nginx
 USER nginx
 EXPOSE 8080
