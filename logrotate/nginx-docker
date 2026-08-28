@@ -1,12 +1,15 @@
 /home/debian/devops-scenario/logs/*.log {
-    every 3 days
-    missingok
+    daily
+    minage 3
     rotate 10
+    missingok
     compress
     delaycompress
     notifempty
     sharedscripts
+
     postrotate
-        docker exec nginx nginx -s reopen >/dev/null 2>&1 || true
+        cd /home/debian/devops-scenario \
+            && /usr/bin/docker compose kill -s USR1 nginx
     endscript
 }
