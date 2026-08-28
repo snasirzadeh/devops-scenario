@@ -3,4 +3,4 @@
 #set -x
 set -Eeuo pipefail
 
-curl -fsS --max-time 2 -o /dev/null http://127.0.0.1/
+curl -fsS http://127.0.0.1/ -o /dev/null
