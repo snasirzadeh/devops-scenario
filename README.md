@@ -1,7 +1,6 @@
 # Project Requirements Checklist
 
 ## 1. Infrastructure & OS Setup
-[Implementation guide](docs/implementation/01-infrastructure-and-os-setup.md) · [Approach and rationale](docs/approach/01-infrastructure-and-os-setup.md)
 
 * **Dual VM Setup:** Install 2 Debian 13 (Trixie) VMs with 2 virtual disks each:
   * **Disk 1 (10GB):** Mounted on `/`
@@ -17,7 +16,6 @@
 ---
 
 ## 2. Dockerfile & Containerization
-[Implementation guide](docs/implementation/02-dockerfile-and-containerization.md) · [Approach and rationale](docs/approach/02-dockerfile-and-containerization.md)
 
 * **Base Image:** Use a lightweight base image running as a non-root user.
 * **Troubleshooting Tools:** Pre-install `curl`, `tcpdump`, `tcpflow`, `vim`, `htop`, etc.
@@ -26,7 +24,6 @@
 ---
 
 ## 3. Docker Compose & Mounts
-[Implementation guide](docs/implementation/03-docker-compose-and-mounts.md) · [Approach and rationale](docs/approach/03-docker-compose-and-mounts.md)
 
 * **HTML Host Mount:** Design a simple `index.html` page stored on the Host that can be modified directly from the host filesystem.
 * **Config & Log Mounts:** Mount web server configuration files and log directories from the Host.
@@ -36,7 +33,6 @@
 ---
 
 ## 4. Log Management & Monitoring
-[Implementation guide](docs/implementation/04-log-management-and-monitoring.md) · [Approach and rationale](docs/approach/04-log-management-and-monitoring.md)
 
 * **Logrotate:** Write a `logrotate` policy to rotate web server logs every 3 days.
 * **Monitoring Script:** Create a monitoring script that runs daily to:
@@ -47,7 +43,6 @@
 ---
 
 ## 5. High Availability & Failover
-[Implementation guide](docs/implementation/05-high-availability-and-failover.md) · [Approach and rationale](docs/approach/05-high-availability-and-failover.md)
 
 * **Virtual IP / Redundancy:** Route web requests to Server 1 by default using a single public IP.
 * **Automatic Failover:** Automatically reroute traffic to Server 2 if Server 1 encounters either of these two conditions:
@@ -57,7 +52,6 @@
 ---
 
 ## 6. Documentation & Rationale
-[Implementation guide](docs/implementation/06-documentation-and-rationale.md) · [Approach and rationale](docs/approach/06-documentation-and-rationale.md)
 
 * **Repository & Readme:** Provide all scripts (Bash, config files, `.md` docs) in a Git repository with a `README.md` detailed enough for someone to recreate the environment from scratch.
 * **5 Key Architectural Decisions:** Document at least 5 design decisions made during the project and justify the reasoning behind each choice (e.g., choice of OS, web server, scheduling tool, etc.).
