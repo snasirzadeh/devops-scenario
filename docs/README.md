@@ -30,7 +30,7 @@ one value for each item below and use it consistently on both nodes.
 | Node 2 address | `192.168.1.12` | SSH alias and operations |
 | Virtual IP (VIP) | `192.168.1.10/24` | Keepalived and client access |
 | Network interface | `ens18` | Keepalived and firewall rules |
-| SSH port | `8546` | OpenSSH, Fail2ban, firewall, key synchronization |
+| SSH port | `<SSH_PORT>` | OpenSSH, Fail2ban, firewall, key synchronization |
 | LVM volume group | `sepehrgv1` | Root filesystem and `/var/lib` logical volume |
 | Compose service | `nginx` | health checks and log reopening |
 

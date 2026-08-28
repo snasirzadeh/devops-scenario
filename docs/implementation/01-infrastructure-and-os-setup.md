@@ -34,6 +34,10 @@ su -
 
 Replace the contents of `/etc/apt/sources.list` with:
 
+```bash
+vim /etc/apt/sources.list
+```
+
 ```sources.list
 # Main Debian repository
 deb http://deb.debian.org/debian/ trixie main contrib non-free-firmware
@@ -48,12 +52,7 @@ deb http://deb.debian.org/debian/ trixie-updates main contrib non-free-firmware
 deb-src http://deb.debian.org/debian/ trixie-updates main contrib non-free-firmware
 ```
 
-Disable the installer ISO (`deb cdrom:`) entry. Also check files below
-`/etc/apt/sources.list.d/` and ensure these repositories are not duplicated in a
-deb822 `.sources` file.
-
 ```bash
-vim /etc/apt/sources.list
 apt update
 ```
 
