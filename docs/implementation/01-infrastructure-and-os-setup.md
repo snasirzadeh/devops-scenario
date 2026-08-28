@@ -34,15 +34,30 @@ Become root for the initial setup because `sudo` is not installed yet:
 su -
 ```
 
-Review `/etc/apt/sources.list` and any files below `/etc/apt/sources.list.d/`.
-Keep the installer-selected Debian mirror, `trixie`, `trixie-updates`, and
-`trixie-security` entries. Do not define the same repository in both legacy
-`.list` and deb822 `.sources` files.
+Replace the contents of `/etc/apt/sources.list` with:
+
+```sources.list
+# Main Debian repository
+deb http://deb.debian.org/debian/ trixie main contrib non-free-firmware
+deb-src http://deb.debian.org/debian/ trixie main contrib non-free-firmware
+
+# Security updates
+deb http://security.debian.org/debian-security trixie-security main contrib non-free-firmware
+deb-src http://security.debian.org/debian-security trixie-security main contrib non-free-firmware
+
+# Updates (formerly known as 'volatile')
+deb http://deb.debian.org/debian/ trixie-updates main contrib non-free-firmware
+deb-src http://deb.debian.org/debian/ trixie-updates main contrib non-free-firmware
+```
+
+Disable the installer ISO (`deb cdrom:`) entry. Also check files below
+`/etc/apt/sources.list.d/` and ensure these repositories are not duplicated in a
+deb822 `.sources` file.
 
 ```bash
-vim /etc/apt/sources.list
+nano /etc/apt/sources.list
 apt update
-apt install -y sudo vim
+apt install -y sudo
 usermod -aG sudo debian
 ```
 
@@ -63,12 +78,11 @@ sudoers configuration before leaving the root shell:
 
 ```bash
 visudo -c
-update-alternatives --config editor
 exit
 ```
 
-Select `vim.tiny` when prompted. Log out and back in so the new group membership
-takes effect, then confirm `sudo -n true` succeeds.
+Log out and back in so the new group membership takes effect, then confirm
+`sudo -n true` succeeds.
 
 ## 3. Apply the initial OS baseline
 
@@ -79,12 +93,15 @@ sudo apt autoremove -y
 sudo apt autoclean
 sudo apt install -y --no-install-recommends \
   ca-certificates curl fail2ban iptables iptables-persistent qemu-guest-agent \
-  rsync systemd-timesyncd util-linux-extra
+  rsync systemd-timesyncd util-linux-extra vim
+sudo update-alternatives --config editor
 sudo timedatectl set-timezone Asia/Tehran
 sudo systemctl enable --now systemd-timesyncd
 sudo systemctl enable --now qemu-guest-agent
 sudo apt autoremove --purge -y
 ```
+
+Select `vim.tiny` when prompted by `update-alternatives`.
 
 Install `qemu-guest-agent` only on a QEMU/KVM-based VM. On another hypervisor,
 use its supported guest agent instead. Verify the baseline:
