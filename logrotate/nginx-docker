@@ -2,6 +2,7 @@
     daily
     minage 3
     rotate 10
+    dateext
     missingok
     compress
     delaycompress
