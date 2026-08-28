@@ -56,19 +56,10 @@ deb-src http://deb.debian.org/debian/ trixie-updates main contrib non-free-firmw
 apt update
 ```
 
-Keep the root shell open for the initial OS setup.
-
-## 3. Apply the initial OS baseline and administrator access
-
-While still logged in as root, upgrade the OS and install the baseline packages:
+## 3. OS Initial
 
 ```bash
-apt full-upgrade -y
-apt autoremove -y
-apt autoclean
-apt install -y --no-install-recommends \
-  ca-certificates curl fail2ban iptables iptables-persistent qemu-guest-agent \
-  rsync sudo systemd-timesyncd util-linux-extra vim
+apt install -y sudo vim
 usermod -aG sudo debian
 ```
 
@@ -93,20 +84,13 @@ update-alternatives --config editor
 Select `vim.tiny` when prompted.
 
 ```bash
+sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean
+sudo apt install -y --no-install-recommends util-linux-extra
 sudo timedatectl set-timezone Asia/Tehran
 sudo systemctl enable --now systemd-timesyncd
+sudo apt install -y qemu-guest-agent
 sudo systemctl enable --now qemu-guest-agent
 sudo apt autoremove --purge -y
-```
-
-Install `qemu-guest-agent` only on a QEMU/KVM-based VM. On another hypervisor,
-use its supported guest agent instead. Verify the baseline:
-
-```bash
-cat /etc/os-release
-timedatectl status
-systemctl is-active systemd-timesyncd
-systemctl is-active qemu-guest-agent
 ```
 
 ## 4. Create the `/var/lib` logical volume
@@ -138,7 +122,7 @@ name reported by `sudo vgs`; do not guess between similar names.
 Copy the existing data before Docker is installed:
 
 ```bash
-sudo systemctl stop fail2ban
+sudo apt install rsync
 sudo mkdir -p /mnt/var_lib
 sudo mount /dev/sepehrgv1/var_lib /mnt/var_lib
 sudo rsync -aHAXx /var/lib/ /mnt/var_lib/
@@ -206,7 +190,7 @@ Banner /etc/ssh/banner
 sudo systemctl restart sshd
 ```
 
-## 6. Configure Fail2ban and the firewall
+## 6. Configure Fail2ban
 
 Create `/etc/fail2ban/jail.d/sshd.local`:
 
@@ -222,20 +206,10 @@ bantime = 3600
 ```
 
 ```bash
+sudo apt install fail2ban
 sudo systemctl enable --now fail2ban
 sudo systemctl restart fail2ban
 sudo fail2ban-client status sshd
-```
-
-Build iptables rules from the VM console. At minimum, allow loopback,
-established traffic, the selected SSH port, HTTP, and VRRP protocol 112 only
-between the two nodes before setting the default input policy to drop. Docker
-adds its own rules; after Docker is installed, enforce container restrictions in
-the `DOCKER-USER` chain as well. Persist only a ruleset that has passed a
-second-session access test:
-
-```bash
-sudo netfilter-persistent save
 ```
 
 ## 7. Configure key replication from Node 1
