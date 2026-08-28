@@ -4,8 +4,8 @@ global_defs {
     script_user debian
 }
 
-vrrp_script check_web {
-    script "/usr/local/bin/check-web.sh"
+vrrp_script http_check {
+    script "/usr/local/bin/http-check.sh"
     interval 2
     timeout 2
     fall 2
@@ -31,7 +31,7 @@ vrrp_instance VI_1 {
     }
 
     track_script {
-        check_web
+        http-check
     }
 }
 
