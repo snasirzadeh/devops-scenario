@@ -59,7 +59,14 @@ apt update
 ## 3. OS Initial
 
 ```bash
-apt install -y sudo vim
+sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean
+sudo apt install -y sudo vim
+sudo apt install -y --no-install-recommends util-linux-extra
+sudo timedatectl set-timezone Asia/Tehran
+sudo systemctl enable --now systemd-timesyncd
+sudo apt install -y qemu-guest-agent
+sudo systemctl enable --now qemu-guest-agent
+sudo apt autoremove --purge -y
 usermod -aG sudo debian
 ```
 
@@ -82,16 +89,6 @@ update-alternatives --config editor
 ```
 
 Select `vim.tiny` when prompted.
-
-```bash
-sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean
-sudo apt install -y --no-install-recommends util-linux-extra
-sudo timedatectl set-timezone Asia/Tehran
-sudo systemctl enable --now systemd-timesyncd
-sudo apt install -y qemu-guest-agent
-sudo systemctl enable --now qemu-guest-agent
-sudo apt autoremove --purge -y
-```
 
 ## 4. Create the `/var/lib` logical volume
 
