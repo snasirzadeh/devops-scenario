@@ -3,12 +3,13 @@
 ## 1. Infrastructure & OS Setup
 [Implementation guide](docs/implementation/01-infrastructure-and-os-setup.md) · [Approach and rationale](docs/approach/01-infrastructure-and-os-setup.md)
 
-* **Dual VM Setup:** Install 2 Linux VMs with 2 Virtual Disks each:
+* **Dual VM Setup:** Install 2 Debian 13 (Trixie) VMs with 2 virtual disks each:
   * **Disk 1 (10GB):** Mounted on `/`
-  * **Disk 2 (20GB):** Mounted on `/var/lib/`
+  * **Disk 2 (10GB):** Mounted on `/var/lib/`
 * **User & SSH Configuration:**
-  * Create a non-root user with `sudo` privileges.
+  * Create the non-root `debian` user with `sudo` privileges.
   * Restrict login exclusively to the provided `ssh-rsa` key.
+  * Run SSH on TCP port `8546` and disable root and password login.
   * Configure automatic key replication so changing the key on Node 1 updates Node 2 automatically.
 * **Hardening:** Apply best practice system hardening on both nodes (SSH, `iptables`, `fail2ban` for SSH).
 * **Docker Installation:** Install Docker Engine on both servers.
