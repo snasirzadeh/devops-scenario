@@ -276,6 +276,16 @@ sudo apt update
 sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
+### Docker post-install
+
+Reference: [Linux post-installation steps for Docker Engine](https://docs.docker.com/engine/install/linux-postinstall/)
+
+```bash
+sudo usermod -aG docker $USER
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+```
+
 ## References
 
 - [Debian 13 (Trixie) installation guide](https://www.debian.org/releases/trixie/installmanual)
