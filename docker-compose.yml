@@ -1,6 +1,18 @@
 services:
+  init-permissions:
+    image: alpine:latest
+    user: "0:0"
+    volumes:
+      - ./logs:/var/log/nginx
+    command:
+      - sh
+      - -c
+      - chown 101:101 /var/log/nginx && chmod 750 /var/log/nginx
   nginx:
     build: .
+    depends_on:
+      init-permissions:
+        condition: service_completed_successfully
     networks:
       - isolated
     ports:
