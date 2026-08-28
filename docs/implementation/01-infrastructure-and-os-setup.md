@@ -59,8 +59,8 @@ apt update
 ## 3. OS Initial
 
 ```bash
-sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean
-sudo apt install -y sudo vim
+apt update && apt install -y sudo vim
+sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean
 sudo apt install -y --no-install-recommends util-linux-extra
 sudo timedatectl set-timezone Asia/Tehran
 sudo systemctl enable --now systemd-timesyncd
@@ -70,10 +70,14 @@ sudo apt autoremove --purge -y
 usermod -aG sudo debian
 ```
 
+`qemu-guest-agent` is installed so the QEMU/KVM hypervisor can communicate with
+the VM for operations such as clean shutdown, status reporting, and IP address
+discovery.
+
 Edit the main `/etc/sudoers` file safely with `visudo`:
 
 ```bash
-visudo -f /etc/sudoers
+visudo /etc/sudoers
 ```
 
 Add the following line:
@@ -88,7 +92,8 @@ Set the default editor:
 update-alternatives --config editor
 ```
 
-Select `vim.tiny` when prompted.
+This step is optional. I personally prefer Vim, so I select `vim.tiny` when
+prompted.
 
 ## 4. Create the `/var/lib` logical volume
 
