@@ -160,11 +160,15 @@ ssh-keygen
 vim ~/.ssh/authorized_keys
 ```
 
-Create the warning text in `/etc/ssh/banner`, protect it, then edit
-`/etc/ssh/sshd_config`:
+Create the SSH banner:
 
 ```bash
 sudo vim /etc/ssh/banner
+```
+
+Edit the SSH daemon configuration:
+
+```bash
 sudo vim /etc/ssh/sshd_config
 ```
 
@@ -192,6 +196,12 @@ sudo systemctl restart sshd
 
 ## 6. Configure Fail2ban
 
+Install Fail2ban:
+
+```bash
+sudo apt install fail2ban
+```
+
 Create `/etc/fail2ban/jail.d/sshd.local`:
 
 ```ini
@@ -206,7 +216,6 @@ bantime = 3600
 ```
 
 ```bash
-sudo apt install fail2ban
 sudo systemctl enable --now fail2ban
 sudo systemctl restart fail2ban
 sudo fail2ban-client status sshd
@@ -220,6 +229,9 @@ The repository provides:
 - `ssh-key-sync/ssh-key-sync.service`
 - `ssh-key-sync/ssh-key-sync.path`
 
+The service uses `User=debian` and `Group=debian`. The path unit watches
+`/home/debian/.ssh/authorized_keys`.
+
 Copy the files on Node 1:
 
 ```bash
@@ -228,15 +240,6 @@ sudo cp ssh-key-sync/ssh-key-sync.service /etc/systemd/system/
 sudo cp ssh-key-sync/ssh-key-sync.path /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now ssh-key-sync.path
-```
-
-Verify Node 2's host key, test the sync manually, change Node 1's managed key,
-and inspect the service result:
-
-```bash
-sudo systemctl start ssh-key-sync.service
-sudo systemctl status ssh-key-sync.service --no-pager
-sudo journalctl -u ssh-key-sync.service -n 50 --no-pager
 ```
 
 ## 8. Install Docker Engine
