@@ -7,6 +7,7 @@
     compress
     delaycompress
     notifempty
+    create 640 101 101
     sharedscripts
 
     postrotate
