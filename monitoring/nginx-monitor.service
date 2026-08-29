@@ -1,0 +1,8 @@
+[Unit]
+Description=Nginx daily log monitoring
+
+[Service]
+Type=oneshot
+User=debian
+Group=debian
+ExecStart=/home/user/devops-scenario/monitoring/nginx-monitor.sh
