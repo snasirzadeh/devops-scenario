@@ -8,7 +8,9 @@ RUN apk add --no-cache \
     tcpflow \
     vim
 RUN rm -f /etc/nginx/conf.d/default.conf
-RUN chown -R nginx:nginx /var/cache/nginx
-USER nginx
+RUN addgroup -g 1000 debian && adduser -D -u 1000 -G debian debian
+RUN chown -R debian:debian /var/cache/nginx /var/log/nginx /var/run
+
+USER debian
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
