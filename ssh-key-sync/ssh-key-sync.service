@@ -7,4 +7,4 @@ Wants=network-online.target
 Type=oneshot
 User=user
 Group=user
-ExecStart=/usr/local/bin/sync-ssh-key.sh
+ExecStart=/usr/local/bin/ssh-key-sync.sh
