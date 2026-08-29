@@ -3,8 +3,8 @@
 #set -x
 set -Eeuo pipefail
 
-LOG_DIR="/home/sepehr/github/devops-scenario/logs"
-MONITOR_DIR="/home/sepehr/github/devops-scenario/monitoring"
+LOG_DIR="/home/user/devops-scenario/logs"
+MONITOR_DIR="/home/user/devops-scenario/monitoring"
 DATE=$(date '+%Y%m%d')
 REPORT="$MONITOR_DIR/nginx.log.$DATE"
 
