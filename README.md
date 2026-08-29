@@ -17,7 +17,8 @@
 
 ## 2. Dockerfile & Containerization
 
-* **Base Image:** Use a lightweight base image running as a non-root user.
+* **Purpose:** Build a lightweight, Dockerized web server.
+* **Base Image:** Use a lightweight base image and run the web server as a non-root user.
 * **Troubleshooting Tools:** Pre-install `curl`, `tcpdump`, `tcpflow`, `vim`, `htop`, etc.
 * **Optimization:** Implement strategies/ideas to keep the image size minimal and secure.
 
