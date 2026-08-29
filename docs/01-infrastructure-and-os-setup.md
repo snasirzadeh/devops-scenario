@@ -1,8 +1,8 @@
-# Infrastructure & OS Setup — Implementation
+# OS Initial, User, SSH & Docker Setup — Implementation
 
 This runbook provisions both Debian 13 (Trixie) VMs, creates a dedicated LVM
-logical volume for `/var/lib`, configures the `debian` administrator, hardens
-SSH, installs the base OS and security packages, and installs Docker Engine.
+logical volume for `/var/lib`, configures the `debian` administrator and SSH
+access, installs the base OS packages, and installs Docker Engine.
 Run every host step on both nodes unless it explicitly says otherwise.
 
 ## 1. Install Debian 13 from the ISO
@@ -151,7 +151,7 @@ sudo reboot
 After reconnecting, run `findmnt /var/lib` again. Do not install Docker until
 the logical volume mounts automatically and the copied data is present.
 
-## 5. Configure and harden SSH
+## 5. Configure SSH access
 
 Run `ssh-keygen` as the `debian` user to create the `.ssh` directory with its
 default permissions, then add the supplied public key to `authorized_keys` as
@@ -162,68 +162,7 @@ ssh-keygen
 vim ~/.ssh/authorized_keys
 ```
 
-Create the SSH banner:
-
-```bash
-sudo vim /etc/ssh/banner
-```
-
-Edit the SSH daemon configuration:
-
-```bash
-sudo vim /etc/ssh/sshd_config
-```
-
-Choose a non-default SSH port and replace `<SSH_PORT>` with that port:
-
-```text
-Port <SSH_PORT>
-PermitRootLogin no
-PermitEmptyPasswords no
-PasswordAuthentication no
-KbdInteractiveAuthentication no
-PubkeyAuthentication yes
-AuthenticationMethods publickey
-AllowUsers debian
-LoginGraceTime 30
-MaxAuthTries 3
-X11Forwarding no
-AllowTcpForwarding no
-Banner /etc/ssh/banner
-```
-
-```bash
-sudo systemctl restart sshd
-```
-
-## 6. Configure Fail2ban
-
-Install Fail2ban:
-
-```bash
-sudo apt install fail2ban
-```
-
-Create `/etc/fail2ban/jail.d/sshd.local`:
-
-```ini
-[sshd]
-enabled = true
-port = <SSH_PORT>
-filter = sshd
-backend = systemd
-maxretry = 3
-findtime = 600
-bantime = 3600
-```
-
-```bash
-sudo systemctl enable --now fail2ban
-sudo systemctl restart fail2ban
-sudo fail2ban-client status sshd
-```
-
-## 7. Configure key replication from Node 1
+## 6. Configure key replication from Node 1
 
 The repository provides:
 
@@ -244,7 +183,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now ssh-key-sync.path
 ```
 
-## 8. Install Docker Engine
+## 7. Install Docker Engine
 
 Reference: [Install Docker Engine on Debian](https://docs.docker.com/engine/install/debian/#install-using-the-repository)
 
@@ -291,5 +230,4 @@ sudo systemctl enable containerd.service
 ## References
 
 - [Debian 13 (Trixie) installation guide](https://www.debian.org/releases/trixie/installmanual)
-- [Debian Trixie `sshd_config` manual](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html)
 - [Docker Engine installation on Debian](https://docs.docker.com/engine/install/debian/)
