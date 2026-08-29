@@ -1,7 +1,6 @@
 # Documentation & Rationale — Implementation
 
-This page is the final repository, reproduction, and handover checklist. The
-paired approach page records the key architectural decisions.
+This page is the final repository, reproduction, and handover checklist.
 
 ## Repository contents
 
@@ -18,17 +17,21 @@ paired approach page records the key architectural decisions.
 ├── keepalived/               # Health check and per-node VRRP configs
 ├── ssh-key-sync/             # Key sync script and systemd units
 └── docs/
-    ├── implementation/       # Installation and validation runbooks
-    └── approach/             # Design rationale and trade-offs
+    ├── 01-infrastructure-and-os-setup.md
+    ├── 02-system-hardening.md
+    ├── 03-dockerfile-and-compose.md
+    ├── 04-log-management-and-monitoring.md
+    ├── 05-high-availability-and-failover.md
+    └── 06-documentation-and-rationale.md
 ```
 
 ## Recreate the environment
 
 1. Clone the repository on both freshly installed nodes.
-2. Follow section 1 to mount disks, create the operator, harden SSH and the host,
-   configure key synchronization, and install Docker.
-3. Follow section 2 to build and inspect the container image.
-4. Follow section 3 to prepare bind-mount permissions and start Nginx.
+2. Follow section 1 to initialize the OS, mount `/var/lib`, configure the user
+   and SSH access, synchronize keys, and install Docker.
+3. Follow section 2 to harden SSH and configure Fail2ban and iptables.
+4. Follow section 3 to build the web-server image and start it with Compose.
 5. Follow section 4 to install logrotate, local mail, and the monitoring timer.
 6. Follow section 5 to install Keepalived and test both failover cases.
 7. Run every acceptance checklist and record the results for handover.
@@ -88,9 +91,8 @@ data, or unredacted secrets.
 ## Definition of done
 
 - All scripts and non-secret configuration required for recreation are tracked.
-- Every README section links to both an implementation and an approach page.
+- Every README section corresponds to its numbered implementation document.
 - Host-specific placeholders are documented and resolved in the deployed copy.
-- The paired approach page contains at least five justified architectural
-  decisions.
+- At least five architectural decisions are documented and justified.
 - A second operator can recreate and validate the environment using only the
   repository, site inventory, and approved secrets.
