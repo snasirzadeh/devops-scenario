@@ -2,11 +2,11 @@
 
 ## 1. OS Initial, User, SSH & Docker Setup
 
-* **Dual VM Setup:** Install 2 Debian 13 (Trixie) VMs with 2 virtual disks each:
+* **Dual VM Setup:** Install 2 Linux VMs with 2 virtual disks each using LVM:
   * **Disk 1 (10GB):** Mounted on `/`
   * **Disk 2 (10GB):** Mounted on `/var/lib/`
 * **User & SSH Configuration:**
-  * Create the non-root `debian` user with `sudo` privileges.
+  * Create a non-root user with `sudo` privileges.
   * Restrict login exclusively to the provided `ssh-rsa` key.
   * Configure automatic key replication so changing the key on Node 1 updates Node 2 automatically.
 * **Docker Installation:** Install Docker Engine on both servers.
