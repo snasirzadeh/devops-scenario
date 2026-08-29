@@ -13,7 +13,7 @@
 
 ---
 
-## 2. [Dockerfile, Docker Compose & Mounts](docs/02-dockerfile-and-compose.md)
+### 2. [Dockerfile, Docker Compose & Mounts](docs/02-dockerfile-and-compose.md)
 
 * **Purpose:** Build a lightweight, Dockerized web server.
 * **Base Image:** Use a lightweight base image and run the web server as a non-root user.
@@ -26,7 +26,7 @@
 
 ---
 
-## 3. [Log Management & Monitoring](docs/03-log-management-and-monitoring.md)
+### 3. [Log Management & Monitoring](docs/03-log-management-and-monitoring.md)
 
 * **Logrotate:** Write a `logrotate` policy to rotate web server logs every 3 days.
 * **Monitoring Script:** Create a monitoring script that runs daily to:
@@ -36,7 +36,7 @@
 
 ---
 
-## 4. [High Availability & Failover](docs/04-high-availability-and-failover.md)
+### 4. [High Availability & Failover](docs/04-high-availability-and-failover.md)
 
 * **Virtual IP / Redundancy:** Route web requests to Server 1 by default using a single public IP.
 * **Automatic Failover:** Automatically reroute traffic to Server 2 if Server 1 encounters either of these two conditions:
@@ -45,13 +45,13 @@
 
 ---
 
-## 5. [System Hardening](docs/05-system-hardening.md)
+### 5. [System Hardening](docs/05-system-hardening.md)
 
 * **Best-Practice Hardening:** Apply best-practice hardening to both servers, including SSH, `iptables`, Fail2ban for SSH, and other required host-security controls.
 
 ---
 
-## 6. [Architectural Decisions](docs/06-architectural-decisions.md)
+### 6. [Architectural Decisions](docs/06-architectural-decisions.md)
 
 * **Decision Record:** Document the key architectural decisions made in the project.
 * **Rationale:** Explain the reason and trade-offs for each decision.
