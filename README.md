@@ -1,6 +1,6 @@
 # Project Requirements Checklist
 
-## 1. Infrastructure & OS Setup
+## 1. OS Initial, User, SSH & Docker Setup
 
 * **Dual VM Setup:** Install 2 Debian 13 (Trixie) VMs with 2 virtual disks each:
   * **Disk 1 (10GB):** Mounted on `/`
@@ -8,24 +8,25 @@
 * **User & SSH Configuration:**
   * Create the non-root `debian` user with `sudo` privileges.
   * Restrict login exclusively to the provided `ssh-rsa` key.
-  * Run SSH on a non-default TCP port and disable root and password login.
   * Configure automatic key replication so changing the key on Node 1 updates Node 2 automatically.
-* **Hardening:** Apply best practice system hardening on both nodes (SSH, `iptables`, `fail2ban` for SSH).
 * **Docker Installation:** Install Docker Engine on both servers.
 
 ---
 
-## 2. Dockerfile & Containerization
+## 2. System Hardening
+
+* **SSH Hardening:** Use a non-default port, disable root and password login, and allow public-key authentication.
+* **Fail2ban:** Monitor SSH and ban repeated failed login attempts.
+* **Firewall:** Install `iptables` and persist the host firewall configuration.
+
+---
+
+## 3. Dockerfile, Docker Compose & Mounts
 
 * **Purpose:** Build a lightweight, Dockerized web server.
 * **Base Image:** Use a lightweight base image and run the web server as a non-root user.
 * **Troubleshooting Tools:** Pre-install `curl`, `tcpdump`, `tcpflow`, `vim`, `htop`, etc.
-* **Optimization:** Implement strategies/ideas to keep the image size minimal and secure.
-
----
-
-## 3. Docker Compose & Mounts
-
+* **Optimization:** Keep the image minimal and secure.
 * **HTML Host Mount:** Design a simple `index.html` page stored on the Host that can be modified directly from the host filesystem.
 * **Config & Log Mounts:** Mount web server configuration files and log directories from the Host.
 * **Network Isolation:** Isolate the container network, opening **only** port 80.
