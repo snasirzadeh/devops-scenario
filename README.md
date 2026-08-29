@@ -1,6 +1,6 @@
 # Project Requirements Checklist
 
-## 1. [OS Initial, User, SSH & Docker Setup](docs/01-infrastructure-and-os-setup.md)
+### 1. [OS Initial, User, SSH & Docker Setup](docs/01-infrastructure-and-os-setup.md)
 
 * **Dual VM Setup:** Install 2 Linux VMs with 2 virtual disks each using LVM:
   * **Disk 1 (10GB):** Mounted on `/`
