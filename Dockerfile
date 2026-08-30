@@ -13,10 +13,9 @@ RUN setcap cap_net_raw+ep /usr/bin/tcpdump && \
     setcap cap_net_raw+ep /usr/bin/tcpflow
 
 RUN rm -f /etc/nginx/conf.d/default.conf
-RUN addgroup -g 1000 debian && adduser -D -u 1000 -G debian debian
-RUN chown -R debian:debian /var/cache/nginx /var/log/nginx /var/run
+RUN mkdir -p /home/nginx && chown -R nginx:nginx /home/nginx /var/cache/nginx /var/log/nginx
 
-USER debian
-WORKDIR /home/debian
+USER nginx
+WORKDIR /home/nginx
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
