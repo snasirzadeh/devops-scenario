@@ -12,8 +12,9 @@ RUN apk add --no-cache \
 RUN setcap cap_net_raw+ep /usr/bin/tcpdump && \
     setcap cap_net_raw+ep /usr/bin/tcpflow
 
-RUN rm -f /etc/nginx/conf.d/default.conf
-RUN mkdir -p /home/nginx && chown -R nginx:nginx /home/nginx /var/cache/nginx /var/log/nginx
+RUN rm -f /etc/nginx/conf.d/default.conf && \
+    mkdir -p /home/nginx && \
+    chown -R nginx:nginx /home/nginx /var/cache/nginx /var/log/nginx
 
 USER nginx
 WORKDIR /home/nginx
