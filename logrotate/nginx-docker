@@ -1,6 +1,4 @@
 /home/debian/devops-scenario/logs/*.log {
-    daily
-    minage 3
     rotate 10
     dateext
     missingok
