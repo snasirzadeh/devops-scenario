@@ -1,10 +1,10 @@
-# Project Requirements Checklist
+## Project Requirements Checklist
 
 ### 1. [OS Initial, User, SSH & Docker Setup](docs/01-infrastructure-and-os-setup.md)
 
-* **Dual VM Setup:** Install 2 Linux VMs with 2 virtual disks each using LVM:
+* **Dual VM Setup:** Install 2 Linux VMs and setup LVM with 2 virtual disks each:
   * **Disk 1 (10GB):** Mounted on `/`
-  * **Disk 2 (10GB):** Mounted on `/var/lib/`
+  * **Disk 2 (20GB):** Mounted on `/var/lib/`
 * **User & SSH Configuration:**
   * Create a non-root user with `sudo` privileges.
   * Restrict login exclusively to the provided `ssh-rsa` key.
