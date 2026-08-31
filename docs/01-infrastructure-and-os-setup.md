@@ -59,9 +59,8 @@ apt update
 ## 3. OS Initial
 
 ```bash
-apt update && apt install -y sudo vim
+apt update && apt install -y sudo vim rsync
 sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean
-sudo apt install -y --no-install-recommends util-linux-extra
 sudo timedatectl set-timezone Asia/Tehran
 sudo systemctl enable --now systemd-timesyncd
 sudo apt install -y qemu-guest-agent
@@ -124,7 +123,6 @@ name reported by `sudo vgs`; do not guess between similar names.
 Copy the existing data before Docker is installed:
 
 ```bash
-sudo apt install rsync
 sudo mkdir -p /mnt/var_lib
 sudo mount /dev/sepehrgv1/var_lib /mnt/var_lib
 sudo rsync -aHAXx /var/lib/ /mnt/var_lib/
@@ -176,6 +174,7 @@ The service uses `User=debian` and `Group=debian`. The path unit watches
 Copy the files on Node 1:
 
 ```bash
+sudo chmod +x ssh-key-sync/ssh-key-sync.sh
 sudo cp ssh-key-sync/ssh-key-sync.sh /usr/local/bin/sync-ssh-key.sh
 sudo cp ssh-key-sync/ssh-key-sync.service /etc/systemd/system/
 sudo cp ssh-key-sync/ssh-key-sync.path /etc/systemd/system/
