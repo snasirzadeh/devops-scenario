@@ -1,4 +1,4 @@
-# Dockerfile, Docker Compose & Mounts — Implementation
+# Dockerfile, Docker Compose & Mounts
 
 The project requires a lightweight Dockerized web server but does not require a
 specific web-server product. This implementation uses Nginx with the
@@ -132,4 +132,3 @@ Bind mounts remain because their source is outside the container writable layer.
 Deleting a container removes its writable layer and runtime metadata but does
 not delete the mounted host files. Deleting a host file also removes the
 persistent copy presented to the container.
-

@@ -1,4 +1,4 @@
-# Log Management & Monitoring — Implementation
+# Log Management & Monitoring
 
 This section deploys the policy in `logrotate/nginx-docker` and the daily
 monitoring job under `monitoring/`. Complete the path and identity normalization

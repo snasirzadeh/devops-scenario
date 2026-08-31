@@ -1,4 +1,4 @@
-# OS Initial, User, SSH & Docker Setup — Implementation
+# OS Initial, User, SSH & Docker Setup
 
 This runbook provisions both Debian 13 (Trixie) VMs, creates a dedicated LVM
 logical volume for `/var/lib`, configures the `debian` administrator and SSH

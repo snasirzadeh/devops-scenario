@@ -1,4 +1,4 @@
-# High Availability & Failover — Implementation
+# High Availability & Failover
 
 The repository uses Keepalived and VRRP to move `192.168.1.10/24` between two
 hosts. Node 1 normally owns the VIP. Its health script makes an HTTP request to
