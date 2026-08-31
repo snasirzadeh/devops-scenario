@@ -26,6 +26,8 @@ sudo vim /etc/ssh/sshd_config
 
 Choose a non-default SSH port and replace `<SSH_PORT>` with that port:
 
+These are the SSH hardening options I prefer to use:
+
 ```text
 Port <SSH_PORT>
 PermitRootLogin no
@@ -53,6 +55,7 @@ Install Fail2ban:
 
 ```bash
 sudo apt install fail2ban
+sudo systemctl enable --now fail2ban
 ```
 
 Create `/etc/fail2ban/jail.d/sshd.local`:
@@ -69,12 +72,15 @@ bantime = 3600
 ```
 
 ```bash
-sudo systemctl enable --now fail2ban
 sudo systemctl restart fail2ban
 sudo fail2ban-client status sshd
 ```
 
 ## 3. Install iptables
+
+- [ArchWiki: Simple stateful firewall](https://wiki.archlinux.org/title/Simple_stateful_firewall)
+- [ArchWiki: Resetting iptables rules](https://wiki.archlinux.org/title/Iptables#Resetting_rules)
+- [Docker with iptables](https://docs.docker.com/engine/network/firewall-iptables/)
 
 Install iptables and its persistence service, then enable the service at boot:
 
@@ -186,10 +192,3 @@ sudo netfilter-persistent reload
 sudo iptables -S
 sudo iptables -t nat -S
 ```
-
-## Reference
-
-- [Debian Trixie `sshd_config` manual](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html)
-- [ArchWiki: Simple stateful firewall](https://wiki.archlinux.org/title/Simple_stateful_firewall)
-- [ArchWiki: Resetting iptables rules](https://wiki.archlinux.org/title/Iptables#Resetting_rules)
-- [Docker with iptables](https://docs.docker.com/engine/network/firewall-iptables/)
