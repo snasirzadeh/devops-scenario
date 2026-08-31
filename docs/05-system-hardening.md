@@ -71,12 +71,16 @@ findtime = 600
 bantime = 3600
 ```
 
+Restart Fail2ban to apply the SSH jail configuration, then verify its status:
+
 ```bash
 sudo systemctl restart fail2ban
 sudo fail2ban-client status sshd
 ```
 
 ## 3. Install iptables
+
+References:
 
 - [ArchWiki: Simple stateful firewall](https://wiki.archlinux.org/title/Simple_stateful_firewall)
 - [ArchWiki: Resetting iptables rules](https://wiki.archlinux.org/title/Iptables#Resetting_rules)
@@ -188,7 +192,7 @@ Validate the file, restore it, and verify the active rules:
 
 ```bash
 sudo iptables-restore --test /etc/iptables/rules.v4
-sudo netfilter-persistent reload
+sudo iptables-restore < /etc/iptables/rules.v4
 sudo iptables -S
 sudo iptables -t nat -S
 ```
