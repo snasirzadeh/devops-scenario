@@ -52,10 +52,6 @@ deb http://deb.debian.org/debian/ trixie-updates main contrib non-free-firmware
 deb-src http://deb.debian.org/debian/ trixie-updates main contrib non-free-firmware
 ```
 
-```bash
-apt update
-```
-
 ## 3. OS Initial
 
 ```bash
@@ -68,6 +64,10 @@ sudo systemctl enable --now qemu-guest-agent
 sudo apt autoremove --purge -y
 ```
 
+`qemu-guest-agent` is installed so the QEMU/KVM hypervisor can communicate with
+the VM for operations such as clean shutdown, status reporting, and IP address
+discovery.
+
 Set the default editor:
 
 ```bash
@@ -76,10 +76,6 @@ update-alternatives --config editor
 
 This step is optional. I personally prefer Vim, so I select `vim.tiny` when
 prompted.
-
-`qemu-guest-agent` is installed so the QEMU/KVM hypervisor can communicate with
-the VM for operations such as clean shutdown, status reporting, and IP address
-discovery.
 
 Add the `debian` user to the `sudo` group:
 
