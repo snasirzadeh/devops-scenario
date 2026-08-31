@@ -3,9 +3,9 @@
 ## 1. Why I used Debian 13
 
 The project requires Linux but does not mandate a distribution. I selected
-[Debian 13 (Trixie)](https://www.debian.org/releases/trixie/) because Debian is
-a widely used Linux distribution, I have more experience administering it, and
-it has been stable and trouble-free in my previous work.
+Debian 13 (Trixie) because Debian is a widely used Linux distribution, I have
+more experience administering it, and it has been stable and trouble-free in
+my previous work.
 
 Most of my Linux experience is with Debian-based distributions rather than
 Red Hat-based distributions. I am more familiar with Debian's package
