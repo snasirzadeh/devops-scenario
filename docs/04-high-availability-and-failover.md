@@ -5,19 +5,7 @@ hosts. Node 1 normally owns the VIP. Its health script makes an HTTP request to
 the locally published Nginx port, so both a stopped Docker service and an
 unhealthy web endpoint reduce Node 1's effective priority below Node 2's.
 
-## 1. Prerequisites
-
-- Both hosts are on the same Layer 2 network and can exchange VRRP protocol 112.
-- `ens18` is replaced with the real interface on each host.
-- `192.168.1.10` is reserved and unused by DHCP or another host.
-- The application is deployed and independently healthy on both nodes.
-- Site content and configuration are kept consistent between nodes.
-- Host and upstream firewalls allow client HTTP traffic to the VIP.
-
-If the public address is provided by a cloud platform or the nodes do not share
-Layer 2, use that platform's floating-IP or load-balancer API instead of VRRP.
-
-## 2. Install Keepalived
+## 1. Install Keepalived
 
 Run on both nodes:
 
@@ -61,7 +49,7 @@ sudo systemctl status keepalived
 If the installed Keepalived version uses a different config-test flag, consult
 its local `keepalived --help` output before starting the service.
 
-## 3. Confirm steady state
+## 2. Confirm steady state
 
 On Node 1:
 
@@ -78,7 +66,7 @@ sudo journalctl -u keepalived -n 100
 ip address show dev ens18
 ```
 
-## 4. Test failure mode 1: Node 1 powers off
+## 3. Test failure mode 1: Node 1 powers off
 
 Keep an independent console on Node 2 and a client continuously requesting the
 VIP. Shut down Node 1 during an approved test window:
@@ -98,7 +86,7 @@ sudo journalctl -u keepalived -n 100
 Start Node 1 and verify whether the intended preemption policy returns the VIP
 to the higher-priority node.
 
-## 5. Test failure mode 2: Docker stops on Node 1
+## 4. Test failure mode 2: Docker stops on Node 1
 
 With both nodes restored and Node 1 holding the VIP:
 
@@ -117,7 +105,7 @@ docker compose -f /home/debian/devops-scenario/docker-compose.yml up -d
 
 Use the normalized repository path rather than the example above.
 
-## 6. Operational checks
+## 5. Operational checks
 
 ```bash
 /usr/local/bin/http-check.sh
