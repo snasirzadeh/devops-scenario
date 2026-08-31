@@ -10,8 +10,8 @@ Install a local mail transport and the `mail` client supported by the chosen OS.
 For a Debian host using local-only Postfix delivery:
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y mailutils postfix
+sudo apt update
+sudo apt install -y mailutils postfix
 ```
 
 Choose **Local only** during package configuration. Verify delivery to the
@@ -44,9 +44,9 @@ messages. Validate this requirement before accepting the deployment.
 Install the normalized files:
 
 ```bash
-sudo install -m 0750 -o debian -g debian monitoring/monitor.sh /usr/local/bin/nginx-monitor.sh
-sudo install -m 0644 monitoring/nginx-monitor.service /etc/systemd/system/
-sudo install -m 0644 monitoring/nginx-monitor.timer /etc/systemd/system/
+sudo cp monitoring/monitor.sh /usr/local/bin/nginx-monitor.sh
+sudo cp monitoring/nginx-monitor.service /etc/systemd/system/
+sudo cp monitoring/nginx-monitor.timer /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now nginx-monitor.timer
 ```
@@ -78,15 +78,30 @@ policy must rotate no more often than every three days, retain the agreed number
 of archives, compress old files, and signal Nginx after rotation. Then install:
 
 ```bash
-sudo install -m 0644 logrotate/nginx-docker /etc/logrotate.d/nginx-docker
+sudo cp logrotate/nginx-docker /etc/logrotate.d/nginx-docker
 sudo logrotate --debug /etc/logrotate.d/nginx-docker
 ```
+
+Edit the system crontab:
+
+```bash
+sudo vim /etc/crontab
+```
+
+Add this job to force Nginx log rotation at midnight every third calendar day:
+
+```cron
+0  0  */3 * *   root    /usr/sbin/logrotate -f /etc/logrotate.d/nginx-docker
+```
+
+The job runs as `root`, so the Nginx log directory and files being owned by UID
+and GID `101:101` do not prevent logrotate from accessing and rotating them.
 
 After the debug pass is clean, force one controlled test and verify that Nginx
 continues writing to the new active log:
 
 ```bash
-sudo logrotate --force --verbose /etc/logrotate.d/nginx-docker
+sudo logrotate -f --verbose /etc/logrotate.d/nginx-docker
 curl --fail http://127.0.0.1/not-found-for-rotation-test || true
 ls -lah logs/
 tail -n 5 logs/access.log

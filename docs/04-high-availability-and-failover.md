@@ -22,7 +22,7 @@ Layer 2, use that platform's floating-IP or load-balancer API instead of VRRP.
 Run on both nodes:
 
 ```bash
-sudo apt-get install -y keepalived
+sudo apt install -y keepalived
 sudo chmod +x keepalived/http-check.sh
 sudo install -m 0750 keepalived/http-check.sh /usr/local/bin/http-check.sh
 ```
