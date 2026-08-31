@@ -153,32 +153,6 @@ COMMIT
 -A DOCKER-USER -j RETURN
 -A DOCKER-USER -j DROP
 # ===========================
--A FORWARD -j DOCKER-USER
--A FORWARD -j DOCKER-FORWARD
--A DOCKER -d <CONTAINER_IP>/32 ! -i <DOCKER_BRIDGE> -o <DOCKER_BRIDGE> -p tcp -m tcp --dport 8080 -j ACCEPT
--A DOCKER ! -i docker0 -o docker0 -j DROP
--A DOCKER ! -i <DOCKER_BRIDGE> -o <DOCKER_BRIDGE> -j DROP
--A DOCKER-BRIDGE -o docker0 -j DOCKER
--A DOCKER-BRIDGE -o <DOCKER_BRIDGE> -j DOCKER
--A DOCKER-CT -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
--A DOCKER-CT -o <DOCKER_BRIDGE> -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
--A DOCKER-FORWARD -j DOCKER-CT
--A DOCKER-FORWARD -j DOCKER-INTERNAL
--A DOCKER-FORWARD -j DOCKER-BRIDGE
--A DOCKER-FORWARD -i docker0 -j ACCEPT
--A DOCKER-FORWARD -i <DOCKER_BRIDGE> -j ACCEPT
-COMMIT
-*nat
-:PREROUTING ACCEPT [63740:3263238]
-:INPUT ACCEPT [0:0]
-:OUTPUT ACCEPT [476:33825]
-:POSTROUTING ACCEPT [1164:71384]
-:DOCKER - [0:0]
--A PREROUTING -m addrtype --dst-type LOCAL -j DOCKER
--A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j DOCKER
--A POSTROUTING -s <DOCKER_SUBNET> ! -o <DOCKER_BRIDGE> -j MASQUERADE
--A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
--A DOCKER ! -i <DOCKER_BRIDGE> -p tcp -m tcp --dport 80 -j DNAT --to-destination <CONTAINER_IP>:8080
 COMMIT
 ```
 
@@ -187,4 +161,10 @@ Validate the file, restore it, and verify the active rules:
 ```bash
 sudo iptables-restore --test /etc/iptables/rules.v4
 sudo iptables-restore < /etc/iptables/rules.v4
+sudo systemctl restart docker
 ```
+
+Docker is restarted intentionally so it recreates its Docker-managed chains and
+rules in the active runtime ruleset. Docker creates these rules for bridge
+networks, forwarding, masquerading, and published container ports, as described
+in the [Docker with iptables documentation](https://docs.docker.com/engine/network/firewall-iptables/).
