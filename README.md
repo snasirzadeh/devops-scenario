@@ -31,7 +31,7 @@
 * **Logrotate:** Write a `logrotate` policy to rotate web server logs every 3 days.
 * **Monitoring Script:** Create a monitoring script that runs daily to:
   * Parse `access.log` and log the top 3 requesting IP addresses.
-  * Check `error.log` / `access.log` for HTTP 404 errors.
+  * Check logs for HTTP 404 errors.
   * Email the results locally to the non-root user (accessible via the `mail` command upon login).
 
 ---
