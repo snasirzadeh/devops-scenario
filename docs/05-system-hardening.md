@@ -63,7 +63,16 @@ sudo systemctl restart fail2ban
 sudo fail2ban-client status sshd
 ```
 
-## 3. Configure persistent iptables rules
+## 3. Install iptables
+
+Install iptables and its persistence service, then enable the service at boot:
+
+```bash
+sudo apt install -y iptables iptables-persistent
+sudo systemctl enable netfilter-persistent
+```
+
+## 4. Configure persistent iptables rules
 
 The following is the persistent IPv4 ruleset for Node 1. Replace
 `<SSH_PORT>`, `<NODE_1_IP>`, and `<NODE_2_IP>` with the deployment values. It
@@ -75,6 +84,13 @@ rules shown below. Replace `<DOCKER_BRIDGE>`, `<DOCKER_SUBNET>`, and
 `<CONTAINER_IP>` with values reported by Docker. Apply and save this ruleset
 only after the Compose stack is running, and regenerate it if Docker recreates
 the network.
+
+Keep the current SSH session open while applying the rules so an error does not
+lock you out. Open the persistent configuration file:
+
+```bash
+sudo vim /etc/iptables/rules.v4
+```
 
 Use the following content for `/etc/iptables/rules.v4`:
 
@@ -155,22 +171,6 @@ COMMIT
 -A DOCKER ! -i <DOCKER_BRIDGE> -p tcp -m tcp --dport 80 -j DNAT --to-destination <CONTAINER_IP>:8080
 COMMIT
 # Completed on Sun Aug 30 00:57:30 2026
-```
-
-## 4. Install and apply iptables
-
-Keep the current SSH session open while applying the rules so an error does not
-lock you out. Install iptables and its persistence service:
-
-```bash
-sudo apt install -y iptables iptables-persistent
-sudo systemctl enable netfilter-persistent
-```
-
-Write the preceding ruleset to the persistent configuration file:
-
-```bash
-sudo vim /etc/iptables/rules.v4
 ```
 
 Validate the file, restore it, and verify the active rules:
