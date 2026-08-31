@@ -66,12 +66,17 @@ sudo systemctl enable --now systemd-timesyncd
 sudo apt install -y qemu-guest-agent
 sudo systemctl enable --now qemu-guest-agent
 sudo apt autoremove --purge -y
-usermod -aG sudo debian
 ```
 
 `qemu-guest-agent` is installed so the QEMU/KVM hypervisor can communicate with
 the VM for operations such as clean shutdown, status reporting, and IP address
 discovery.
+
+Add the `debian` user to the `sudo` group:
+
+```bash
+usermod -aG sudo debian
+```
 
 Edit the main `/etc/sudoers` file safely with `visudo`:
 
