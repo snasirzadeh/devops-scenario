@@ -23,17 +23,18 @@ Run on both nodes:
 
 ```bash
 sudo apt-get install -y keepalived
-sudo install -m 0750 keepalived/check-web.sh /usr/local/bin/check-web.sh
+sudo chmod +x keepalived/http-check.sh
+sudo install -m 0750 keepalived/http-check.sh /usr/local/bin/http-check.sh
 ```
 
 Copy the node-specific configuration:
 
 ```bash
 # Node 1 only
-sudo install -m 0600 keepalived/keepalived.conf.server1 /etc/keepalived/keepalived.conf
+sudo cp keepalived/keepalived.conf.server1 /etc/keepalived/keepalived.conf
 
 # Node 2 only
-sudo install -m 0600 keepalived/keepalived.conf.server2 /etc/keepalived/keepalived.conf
+sudo cp keepalived/keepalived.conf.server2 /etc/keepalived/keepalived.conf
 ```
 
 Before starting, replace the example interface, VIP/prefix, authentication
@@ -47,7 +48,7 @@ Validate and start:
 ```bash
 sudo keepalived --config-test --use-file=/etc/keepalived/keepalived.conf
 sudo systemctl enable --now keepalived
-sudo systemctl status keepalived --no-pager
+sudo systemctl status keepalived
 ```
 
 If the installed Keepalived version uses a different config-test flag, consult
@@ -66,7 +67,7 @@ The VIP should be present only on Node 1. On Node 2, inspect logs and confirm it
 is in BACKUP state:
 
 ```bash
-sudo journalctl -u keepalived -n 100 --no-pager
+sudo journalctl -u keepalived -n 100
 ip address show dev ens18
 ```
 
@@ -84,7 +85,7 @@ On Node 2, confirm the VIP appears and HTTP succeeds:
 ```bash
 ip address show dev ens18
 curl --fail http://192.168.1.10/
-sudo journalctl -u keepalived -n 100 --no-pager
+sudo journalctl -u keepalived -n 100
 ```
 
 Start Node 1 and verify whether the intended preemption policy returns the VIP
@@ -112,8 +113,8 @@ Use the normalized repository path rather than the example above.
 ## 6. Operational checks
 
 ```bash
-/usr/local/bin/check-web.sh
-sudo journalctl -u keepalived --since '15 minutes ago' --no-pager
+/usr/local/bin/http-check.sh
+sudo journalctl -u keepalived --since '15 minutes ago'
 sudo tcpdump -ni ens18 proto 112
 ```
 

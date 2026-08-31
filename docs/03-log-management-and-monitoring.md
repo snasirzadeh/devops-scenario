@@ -55,8 +55,8 @@ Run the service without waiting for the timer:
 
 ```bash
 sudo systemctl start nginx-monitor.service
-sudo systemctl status nginx-monitor.service --no-pager
-sudo journalctl -u nginx-monitor.service -n 100 --no-pager
+sudo systemctl status nginx-monitor.service
+sudo journalctl -u nginx-monitor.service -n 100
 sudo -iu debian mail
 ```
 

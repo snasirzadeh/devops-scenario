@@ -122,8 +122,6 @@ Using `100%PVS` with `/dev/sdb` keeps this logical volume on the added physical
 volume. If the installed volume-group name is not `sepehrgv1`, use the exact
 name reported by `sudo vgs`; do not guess between similar names.
 
-Copy the existing data before Docker is installed:
-
 ```bash
 sudo mkdir -p /mnt/var_lib
 sudo mount /dev/sepehrgv1/var_lib /mnt/var_lib

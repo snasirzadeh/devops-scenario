@@ -1,10 +1,10 @@
 # Build a lightweight, Dockerized web server.
 
+## 1. Dockerfile and containerization
+
 The project requires a lightweight Dockerized web server but does not require a
 specific web-server product. This implementation uses Nginx with the
 `nginx:1.31.4-alpine` base image.
-
-## 1. Dockerfile and containerization
 
 The root `Dockerfile` installs the requested diagnostic tools without caching
 the Alpine package index, creates the non-root `nginx` user, changes ownership
@@ -18,10 +18,6 @@ From the repository root:
 ```bash
 docker compose build
 ```
-
-`--pull` refreshes the mutable base-image tag for a deliberate rebuild. For a
-reproducible release, record and pin the approved base-image digest after the
-image has passed vulnerability scanning.
 
 ### Packet-capture capability
 
