@@ -40,6 +40,9 @@ X11Forwarding no
 Banner /etc/ssh/banner
 ```
 
+Restart the SSH daemon to apply the new configuration. Keep the current SSH
+session open until a new connection succeeds with the selected port and key.
+
 ```bash
 sudo systemctl restart sshd
 ```
