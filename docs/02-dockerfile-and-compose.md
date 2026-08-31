@@ -32,6 +32,7 @@ approved, temporary diagnostic container only:
 ```bash
 docker compose run --rm --cap-add NET_RAW --cap-add NET_ADMIN nginx tcpdump -i any
 ```
+
 ## 2. Docker Compose and mounts
 
 `docker-compose.yml` builds the local image, maps host port 80 to container port

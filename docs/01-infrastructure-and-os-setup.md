@@ -7,6 +7,8 @@ Run every host step on both nodes unless it explicitly says otherwise.
 
 ## 1. Install Debian 13 from the ISO
 
+Reference: [Debian 13 installation guide](https://www.debian.org/releases/trixie/installmanual)
+
 Attach the Debian 13 (Trixie) minimal ISO and choose **Graphical install**.
 Complete the installer as follows:
 
@@ -225,8 +227,3 @@ sudo usermod -aG docker $USER
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
 ```
-
-## References
-
-- [Debian 13 (Trixie) installation guide](https://www.debian.org/releases/trixie/installmanual)
-- [Docker Engine installation on Debian](https://docs.docker.com/engine/install/debian/)

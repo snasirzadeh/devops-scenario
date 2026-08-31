@@ -105,7 +105,7 @@ systemctl cat nginx-monitor.service nginx-monitor.timer
 
 Record the next run time and test local mail retrieval as the non-root user.
 
-## Acceptance checks
+## 5. Acceptance checks
 
 - The logrotate configuration passes a debug parse with no errors.
 - A forced rotation creates an archive and Nginx writes new requests to the new

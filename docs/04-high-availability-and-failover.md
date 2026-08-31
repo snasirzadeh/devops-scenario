@@ -5,7 +5,7 @@ hosts. Node 1 normally owns the VIP. Its health script makes an HTTP request to
 the locally published Nginx port, so both a stopped Docker service and an
 unhealthy web endpoint reduce Node 1's effective priority below Node 2's.
 
-## Prerequisites
+## 1. Prerequisites
 
 - Both hosts are on the same Layer 2 network and can exchange VRRP protocol 112.
 - `ens18` is replaced with the real interface on each host.
@@ -17,7 +17,7 @@ unhealthy web endpoint reduce Node 1's effective priority below Node 2's.
 If the public address is provided by a cloud platform or the nodes do not share
 Layer 2, use that platform's floating-IP or load-balancer API instead of VRRP.
 
-## Install Keepalived
+## 2. Install Keepalived
 
 Run on both nodes:
 
@@ -53,7 +53,7 @@ sudo systemctl status keepalived --no-pager
 If the installed Keepalived version uses a different config-test flag, consult
 its local `keepalived --help` output before starting the service.
 
-## Confirm steady state
+## 3. Confirm steady state
 
 On Node 1:
 
@@ -70,7 +70,7 @@ sudo journalctl -u keepalived -n 100 --no-pager
 ip address show dev ens18
 ```
 
-## Test failure mode 1: Node 1 powers off
+## 4. Test failure mode 1: Node 1 powers off
 
 Keep an independent console on Node 2 and a client continuously requesting the
 VIP. Shut down Node 1 during an approved test window:
@@ -90,7 +90,7 @@ sudo journalctl -u keepalived -n 100 --no-pager
 Start Node 1 and verify whether the intended preemption policy returns the VIP
 to the higher-priority node.
 
-## Test failure mode 2: Docker stops on Node 1
+## 5. Test failure mode 2: Docker stops on Node 1
 
 With both nodes restored and Node 1 holding the VIP:
 
@@ -109,7 +109,7 @@ docker compose -f /home/debian/devops-scenario/docker-compose.yml up -d
 
 Use the normalized repository path rather than the example above.
 
-## Operational checks
+## 6. Operational checks
 
 ```bash
 /usr/local/bin/check-web.sh
@@ -120,7 +120,7 @@ sudo tcpdump -ni ens18 proto 112
 Packet capture is optional and should be limited to an approved diagnostic
 window.
 
-## Acceptance checks
+## 7. Acceptance checks
 
 - Node 1 owns the VIP while both web services are healthy.
 - Node 2 does not own the VIP in steady state.
