@@ -149,6 +149,17 @@ placeholder with the correct deployment value, and place new rules before the
 COMMIT
 ```
 
+I intentionally kept the `OUTPUT` policy set to `ACCEPT` because I did not
+consider blocking outbound traffic necessary for this deployment. The explicit
+DNS, HTTP, HTTPS, loopback, and VRRP allow rules document the outbound traffic
+the system depends on. They also prepare the ruleset for possible future
+outbound `DROP` or `REJECT` rules without causing essential services to stop
+working.
+
+I implemented the `DOCKER-USER` rules with help from ChatGPT and a friend.
+Managing Docker's interaction with iptables proved challenging, so I chose
+this approach as a simpler and more manageable solution for this deployment.
+
 Validate the file, restore it, and verify the active rules:
 
 ```bash
