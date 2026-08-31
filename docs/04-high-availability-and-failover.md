@@ -24,8 +24,15 @@ Run on both nodes:
 ```bash
 sudo apt install -y keepalived
 sudo chmod +x keepalived/http-check.sh
-sudo install -m 0750 keepalived/http-check.sh /usr/local/bin/http-check.sh
+sudo cp keepalived/http-check.sh /usr/local/bin/http-check.sh
 ```
+
+The `http-check.sh` script requests the local web page and succeeds only when
+the HTTP endpoint responds successfully. I prefer this end-to-end check over
+checking only whether the Docker service is running because it also detects a
+stopped or unhealthy container, an Nginx failure, and an unavailable web
+endpoint. A running Docker daemon alone does not prove that users can reach the
+web page.
 
 Copy the node-specific configuration:
 
