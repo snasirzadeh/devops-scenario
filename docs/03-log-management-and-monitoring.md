@@ -104,14 +104,3 @@ systemctl cat nginx-monitor.service nginx-monitor.timer
 ```
 
 Record the next run time and test local mail retrieval as the non-root user.
-
-## 5. Acceptance checks
-
-- The logrotate configuration passes a debug parse with no errors.
-- A forced rotation creates an archive and Nginx writes new requests to the new
-  `access.log`.
-- The daily timer is enabled and has a next trigger time.
-- The report ranks the top three source IPs by request count.
-- The report finds 404 responses from `access.log` and related entries from
-  `error.log` when present.
-- The non-root user can read the delivered report using `mail`.

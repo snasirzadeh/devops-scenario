@@ -119,12 +119,3 @@ sudo tcpdump -ni ens18 proto 112
 
 Packet capture is optional and should be limited to an approved diagnostic
 window.
-
-## 7. Acceptance checks
-
-- Node 1 owns the VIP while both web services are healthy.
-- Node 2 does not own the VIP in steady state.
-- Powering off Node 1 moves the VIP to Node 2 and HTTP remains available.
-- Stopping Docker on Node 1 also moves the VIP to Node 2.
-- Restoring Node 1 returns the cluster to the documented steady state.
-- The VIP is never simultaneously active on both nodes during a healthy network.
