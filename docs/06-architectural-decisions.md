@@ -5,9 +5,7 @@
 The project requires Linux but does not mandate a distribution. I selected
 Debian 13 (Trixie) instead of another operating system because Debian is a
 widely used Linux distribution, I have more experience administering it, and
-it has been stable and trouble-free in my previous work. It also provides a
-minimal installation, reliable package management, systemd, LVM, and all the
-packages required by this project.
+it has been stable and trouble-free in my previous work.
 
 Most of my Linux experience is with Debian-based distributions rather than
 Red Hat-based distributions. I am more familiar with Debian's package
