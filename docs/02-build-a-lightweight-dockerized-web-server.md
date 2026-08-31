@@ -1,5 +1,9 @@
 # Build a lightweight, Dockerized web server.
 
+The goal is to build a small and maintainable Docker image that runs Nginx as a
+non-root user, keeps website content, configuration, and logs on the host, and
+exposes only the required HTTP port through an isolated container network.
+
 ## 1. Dockerfile and containerization
 
 The project requires a lightweight Dockerized web server but does not require a
@@ -16,18 +20,17 @@ of the required Nginx directories, and runs the web server as `nginx` on port
 From the repository root:
 
 ```bash
-mkdir -p logs
 docker compose build
 docker compose run --rm nginx id
+mkdir -p logs
 sudo chown 101:101 logs
 sudo chmod 750 logs
 ```
 
-The host log directory must exist before the container is started. In this
-image, the Nginx user uses UID and GID `101:101`. Verify those values with the
-`id` command before changing the ownership of `logs`. This ownership allows
-Nginx to write to the bind-mounted directory, while mode `750` limits access to
-its owner and group.
+In this image, the Nginx user uses UID and GID `101:101`. Verify those values
+with the `id` command, then create the host log directory before starting the
+application service. This ownership allows Nginx to write to the bind-mounted
+directory, while mode `750` limits access to its owner and group.
 
 ### Packet-capture capability
 
