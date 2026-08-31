@@ -9,6 +9,21 @@ it has been stable and trouble-free in my previous work. It also provides a
 minimal installation, reliable package management, systemd, LVM, and all the
 packages required by this project.
 
+Most of my Linux experience is with Debian-based distributions rather than
+Red Hat-based distributions. I am more familiar with Debian's package
+management, filesystem conventions, configuration, and troubleshooting
+workflow. Choosing the ecosystem I know best reduces setup time, avoids
+unnecessary operational risk, and makes the system easier for me to maintain.
+
+My main priorities were maximum stability and a minimal base system. I prefer
+Debian over Ubuntu for this type of deployment because Debian's stable releases
+focus on being ready and thoroughly tested, while Ubuntu follows a time-based
+release schedule, commonly publishing releases in April and October with
+defined support periods. In my experience, Debian's approach produces a more
+predictable long-lived server platform with fewer unnecessary changes. This is
+a personal operational preference rather than a claim that Ubuntu cannot meet
+the project's requirements.
+
 ## 2. LVM and a separate `/var/lib`
 
 The OS and data disks use LVM. Docker stores its runtime data under
