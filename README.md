@@ -50,7 +50,6 @@
 
 ---
 
-### 6. [Architectural Decisions](docs/06-architectural-decisions.md)
+### 6. [Why I Used Debian](docs/06-architectural-decisions.md#1-why-i-used-debian-13)
 
-* **Decision Record:** Document the key architectural decisions made in the project.
-* **Rationale:** Explain the reason and trade-offs for each decision.
+* **Debian:** Explain why Debian 13 was selected for this project.
