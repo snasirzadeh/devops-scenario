@@ -16,8 +16,17 @@ of the required Nginx directories, and runs the web server as `nginx` on port
 From the repository root:
 
 ```bash
+mkdir -p logs
+sudo chown 101:101 logs
+sudo chmod 750 logs
 docker compose build
+docker compose run --rm nginx id
 ```
+
+The host log directory must exist before the image is built and the container
+is started. UID and GID `101:101` allow the non-root Nginx process to write to
+the bind-mounted directory, while mode `750` limits access to its owner and
+group.
 
 ### Packet-capture capability
 
@@ -47,20 +56,6 @@ devops-scenario/
     ├── access.log
     └── error.log
 ```
-
-Create the log directory and keep `html/` and `nginx/` readable by the
-container:
-
-```bash
-mkdir logs
-sudo chmod 750 logs
-sudo chown 101:101 logs
-docker compose build
-docker compose run --rm nginx id
-```
-
-The non-root Nginx process must be able to write to `logs/`. Apply the ownership
-and permissions required by the UID/GID reported by the `id` command.
 
 ### Validate and start
 
