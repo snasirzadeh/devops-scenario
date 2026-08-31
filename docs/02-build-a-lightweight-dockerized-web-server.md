@@ -20,11 +20,11 @@ of the required Nginx directories, and runs the web server as `nginx` on port
 From the repository root:
 
 ```bash
-docker compose build
 docker compose run --rm nginx id
 mkdir -p logs
 sudo chown 101:101 logs
 sudo chmod 750 logs
+docker compose build
 ```
 
 In this image, the Nginx user uses UID and GID `101:101`. Verify those values
@@ -64,7 +64,6 @@ devops-scenario/
 ### Validate and start
 
 ```bash
-docker compose run --rm nginx nginx -t
 docker compose up --wait
 docker compose ps
 curl http://127.0.0.1/
@@ -83,13 +82,6 @@ vim html/index.html
 curl --fail http://127.0.0.1/
 ```
 
-For an Nginx configuration change, validate before reloading:
-
-```bash
-docker compose exec nginx nginx -t
-docker compose exec nginx nginx -s reload
-```
-
 ### Network verification
 
 Compose attaches the `nginx` service to the project-scoped `isolated` bridge
@@ -99,11 +91,9 @@ network. The service is reachable from the host only through the published
 ```bash
 docker compose ps
 docker compose port nginx 8080
-docker inspect "$(docker compose ps -q nginx)" --format '{{json .NetworkSettings.Ports}}'
 ```
 
-The expected host publication is only `0.0.0.0:80`, and possibly `[::]:80` when
-IPv6 is enabled.
+The expected host publication is only `0.0.0.0:80`.
 
 ### Bind mounts
 
