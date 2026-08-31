@@ -4,11 +4,15 @@ Apply the following hardening steps on both nodes.
 
 ## 1. Harden SSH
 
+Reference: [SSH hardening best practices](https://linuxize.com/post/ssh-hardening-best-practices/)
+
 Create the SSH banner:
 
 ```bash
 sudo vim /etc/ssh/banner
 ```
+
+For example, use the following warning message:
 
 ```text
 Authorized access only. All activity is monitored and logged.
@@ -183,7 +187,6 @@ sudo iptables -t nat -S
 ## Reference
 
 - [Debian Trixie `sshd_config` manual](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html)
-- [Linuxize: SSH hardening best practices](https://linuxize.com/post/ssh-hardening-best-practices/)
 - [ArchWiki: Simple stateful firewall](https://wiki.archlinux.org/title/Simple_stateful_firewall)
 - [ArchWiki: Resetting iptables rules](https://wiki.archlinux.org/title/Iptables#Resetting_rules)
 - [Docker with iptables](https://docs.docker.com/engine/network/firewall-iptables/)
