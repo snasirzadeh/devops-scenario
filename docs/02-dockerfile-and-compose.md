@@ -7,8 +7,8 @@ specific web-server product. This implementation uses Nginx with the
 ## 1. Dockerfile and containerization
 
 The root `Dockerfile` installs the requested diagnostic tools without caching
-the Alpine package index, creates the non-root `debian` user, changes ownership
-of the required Nginx directories, and runs the web server as `debian` on port
+the Alpine package index, creates the non-root `nginx` user, changes ownership
+of the required Nginx directories, and runs the web server as `nginx` on port
 8080.
 
 ### Build the image
@@ -16,9 +16,7 @@ of the required Nginx directories, and runs the web server as `debian` on port
 From the repository root:
 
 ```bash
-docker build --pull --tag devops-scenario-nginx:local .
-docker image ls devops-scenario-nginx:local
-docker history devops-scenario-nginx:local
+docker compose build
 ```
 
 `--pull` refreshes the mutable base-image tag for a deliberate rebuild. For a
@@ -34,10 +32,6 @@ approved, temporary diagnostic container only:
 ```bash
 docker compose run --rm --cap-add NET_RAW --cap-add NET_ADMIN nginx tcpdump -i any
 ```
-
-Remove the temporary container when the investigation ends; do not add these
-capabilities permanently to `docker-compose.yml`.
-
 ## 2. Docker Compose and mounts
 
 `docker-compose.yml` builds the local image, maps host port 80 to container port
@@ -62,7 +56,8 @@ container:
 
 ```bash
 mkdir logs
-sudo chmod 755 logs
+sudo chmod 750 logs
+sudo chown 101:101 logs
 docker compose build
 docker compose run --rm nginx id
 ```
@@ -73,16 +68,13 @@ and permissions required by the UID/GID reported by the `id` command.
 ### Validate and start
 
 ```bash
-docker compose config --quiet
 docker compose run --rm nginx nginx -t
 docker compose up --wait
 docker compose ps
-curl --fail http://127.0.0.1/
+curl http://127.0.0.1/
 ```
 
 Only host port 80 is published. Nginx listens on port 8080 inside the container.
-If the host firewall is enabled, allow port 80. Do not publish port 8080 or a
-troubleshooting port directly on the host.
 
 ### Modify content from the host
 
@@ -141,31 +133,3 @@ Deleting a container removes its writable layer and runtime metadata but does
 not delete the mounted host files. Deleting a host file also removes the
 persistent copy presented to the container.
 
-Demonstrate container recreation:
-
-```bash
-docker compose up -d
-curl --fail http://127.0.0.1/
-docker compose up -d --force-recreate
-curl --fail http://127.0.0.1/
-test -f html/index.html && test -f logs/access.log
-```
-
-Do not use `docker compose down --volumes` casually if named volumes are added
-to the project later.
-
-### Stop and inspect
-
-```bash
-docker compose logs --tail=100 nginx
-docker compose down
-```
-
-### Acceptance checks
-
-- Host port 80 serves `html/index.html`.
-- A host-side HTML edit appears without a rebuild.
-- Nginx loads the bind-mounted configuration.
-- Access and error logs are written beneath `logs/`.
-- Only HTTP port 80 is published.
-- HTML, configuration, and logs survive container deletion and recreation.
