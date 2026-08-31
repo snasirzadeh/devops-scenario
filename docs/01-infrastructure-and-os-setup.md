@@ -68,6 +68,15 @@ sudo systemctl enable --now qemu-guest-agent
 sudo apt autoremove --purge -y
 ```
 
+Set the default editor:
+
+```bash
+update-alternatives --config editor
+```
+
+This step is optional. I personally prefer Vim, so I select `vim.tiny` when
+prompted.
+
 `qemu-guest-agent` is installed so the QEMU/KVM hypervisor can communicate with
 the VM for operations such as clean shutdown, status reporting, and IP address
 discovery.
@@ -89,15 +98,6 @@ Add the following line:
 ```sudoers
 %debian ALL=(ALL:ALL) NOPASSWD: ALL
 ```
-
-Set the default editor:
-
-```bash
-update-alternatives --config editor
-```
-
-This step is optional. I personally prefer Vim, so I select `vim.tiny` when
-prompted.
 
 ## 4. Create the `/var/lib` logical volume
 
