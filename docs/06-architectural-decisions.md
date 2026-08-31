@@ -2,54 +2,43 @@
 
 ## 1. Debian 13 as the Linux implementation
 
-The project requires Linux but does not mandate a distribution. Debian 13
-(Trixie) was selected because it provides a minimal installation, stable package
-management, systemd, LVM, and the packages required by the project.
+The project requires Linux but does not mandate a distribution. I selected
+Debian 13 (Trixie) instead of another operating system because Debian is a
+widely used Linux distribution, I have more experience administering it, and
+it has been stable and trouble-free in my previous work. It also provides a
+minimal installation, reliable package management, systemd, LVM, and all the
+packages required by this project.
 
-## 2. Two virtual machines
-
-Two independent VMs are used so the web service can fail over when the primary
-VM shuts down or its Docker service fails. Running two containers on one VM
-would not protect the service from a VM or OS failure.
-
-## 3. LVM and a separate `/var/lib`
+## 2. LVM and a separate `/var/lib`
 
 The OS and data disks use LVM. Docker stores its runtime data under
 `/var/lib/docker`, so mounting the second disk at `/var/lib` prevents Docker data
 from consuming the root filesystem.
 
-## 4. Nginx Alpine as the web-server implementation
+## 3. Nginx Alpine as the web-server implementation
 
-The project requires a lightweight Dockerized web server but does not require
-Nginx. This implementation selects `nginx:1.31.4-alpine` because it combines a
-small Alpine base with a production web server.
+The project requires a lightweight Dockerized web server but does not mandate a
+specific product. I selected Nginx because I have used it extensively and have
+more experience configuring, securing, monitoring, and troubleshooting it than
+other web servers. Using a familiar product reduces configuration mistakes and
+makes operational problems faster to diagnose.
 
-## 5. Non-root container user
+Nginx is also well suited to this project because it serves static content
+efficiently, has straightforward configuration, supports reverse proxying if
+the application grows, and runs with a small resource footprint. The
+`nginx:1.31.4-alpine` image combines those capabilities with a compact base
+image, which reduces image size and unnecessary packages. Other web servers
+could satisfy the requirements, but Nginx provides the best balance of
+familiarity, simplicity, performance, and maintainability for this deployment.
 
-The image creates the `debian` user and runs Nginx as that user on port 8080.
-Host port 80 is mapped to container port 8080 because a non-root process does
-not bind directly to a privileged port.
-
-## 6. Host bind mounts
-
-The HTML, Nginx configuration, and logs are bind-mounted from the host. Website
-content and configuration can therefore be changed without rebuilding the
-image, and these files remain when a container is recreated.
-
-## 7. Systemd for automation
+## 4. Systemd for automation
 
 Systemd path, service, and timer units manage SSH-key synchronization and daily
 monitoring. This uses the operating system's existing service manager and keeps
 execution and logs visible through systemd.
 
-## 8. Keepalived for failover
+## 5. Keepalived for failover
 
 Keepalived provides a virtual IP shared by the two nodes. Node 1 is preferred,
 and Node 2 takes over when Node 1 shuts down or its local web-service health
 check fails.
-
-## 9. Layered host hardening
-
-SSH restrictions, Fail2ban, and iptables provide separate protection layers.
-SSH limits remote access, Fail2ban responds to repeated authentication failures,
-and iptables controls traffic reaching each host.
