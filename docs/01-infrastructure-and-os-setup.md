@@ -1,4 +1,4 @@
-# OS Initial, User, SSH & Docker Setup
+# Infrastructure and OS Initial
 
 This runbook provisions both Debian 13 (Trixie) VMs, creates a dedicated LVM
 logical volume for `/var/lib`, configures the `debian` administrator and SSH
@@ -59,7 +59,7 @@ apt update
 ## 3. OS Initial
 
 ```bash
-apt update && apt install -y sudo vim rsync
+apt update && apt install -y sudo vim rsync curl
 sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean
 sudo timedatectl set-timezone Asia/Tehran
 sudo systemctl enable --now systemd-timesyncd
@@ -190,7 +190,7 @@ Add Docker's official GPG key:
 
 ```bash
 sudo apt update
-sudo apt install ca-certificates curl
+sudo apt install ca-certificates
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
