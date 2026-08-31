@@ -106,46 +106,36 @@ Save the active rules before editing so Docker-generated rules remain intact:
 sudo iptables-save /etc/iptables/rules.v4
 ```
 
-Edit `/etc/iptables/rules.v4` and add the required custom rules to their
-corresponding existing `raw` and `filter` tables. The following block shows
-where the rules belong; do not copy and paste it over the complete file.
+Edit `/etc/iptables/rules.v4` and add the required custom rules to the existing
+`filter` table. The following block shows where the rules belong; do not copy
+and paste it over the complete file.
 Preserve the Docker-generated runtime rules already in the file, replace every
 placeholder with the correct deployment value, and place new rules before the
-`COMMIT` line for the relevant table.
+`COMMIT` line for the `filter` table.
 
 ```iptables
 *filter
 :INPUT DROP [0:0]
 :FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
-# ===========================
-# INPUT
-# ===========================
 -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -p tcp --dport 80 -j ACCEPT
 -A INPUT -p tcp --dport <SSH_PORT> -j ACCEPT
 -A INPUT -p 112 -s <NODE_2_IP> -j ACCEPT
-# ===========================
-# OUTPUT
-# ===========================
 -A OUTPUT -o lo -j ACCEPT
 -A OUTPUT -p udp --dport 53 -j ACCEPT
 -A OUTPUT -p tcp --dport 53 -j ACCEPT
 -A OUTPUT -p tcp --dport 80 -j ACCEPT
 -A OUTPUT -p tcp --dport 443 -j ACCEPT
 -A OUTPUT -p 112 -s <NODE_1_IP> -j ACCEPT
-# ===========================
-# DOCKER
-# ===========================
 -A DOCKER-USER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A DOCKER-USER -s 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16 -j ACCEPT
 -A DOCKER-USER -p tcp -m conntrack --ctorigdstport 80 --ctdir ORIGINAL -j ACCEPT
 -A DOCKER-USER -p tcp -m conntrack --ctorigdstport 443 --ctdir ORIGINAL -j ACCEPT
 -A DOCKER-USER -j RETURN
 -A DOCKER-USER -j DROP
-# ===========================
 COMMIT
 ```
 
