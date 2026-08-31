@@ -103,7 +103,7 @@ port, and VRRP (IP protocol 112) from Node 2.
 Save the active rules before editing so Docker-generated rules remain intact:
 
 ```bash
-sudo iptables-restore < /etc/iptables/rules.v4
+sudo iptables-save /etc/iptables/rules.v4
 ```
 
 Edit `/etc/iptables/rules.v4` and add the required custom rules to their
