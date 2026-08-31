@@ -1,4 +1,4 @@
-# Dockerfile, Docker Compose & Mounts
+# Build a lightweight, Dockerized web server.
 
 The project requires a lightweight Dockerized web server but does not require a
 specific web-server product. This implementation uses Nginx with the
