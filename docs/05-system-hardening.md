@@ -176,3 +176,6 @@ sudo systemctl enable netfilter-persistent
 ## Reference
 
 - [Debian Trixie `sshd_config` manual](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html)
+- [ArchWiki: Simple stateful firewall](https://wiki.archlinux.org/title/Simple_stateful_firewall)
+- [ArchWiki: Resetting iptables rules](https://wiki.archlinux.org/title/Iptables#Resetting_rules)
+- [Docker with iptables](https://docs.docker.com/engine/network/firewall-iptables/)
