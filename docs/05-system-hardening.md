@@ -82,8 +82,8 @@ sudo fail2ban-client status sshd
 
 References:
 
+- [ArchWiki: Iptables](https://wiki.archlinux.org/title/Iptables#)
 - [ArchWiki: Simple stateful firewall](https://wiki.archlinux.org/title/Simple_stateful_firewall)
-- [ArchWiki: Resetting iptables rules](https://wiki.archlinux.org/title/Iptables#Resetting_rules)
 - [Docker with iptables](https://docs.docker.com/engine/network/firewall-iptables/)
 
 Install iptables and its persistence service, then enable the service at boot:
@@ -103,8 +103,7 @@ port, and VRRP (IP protocol 112) from Node 2.
 Save the active rules before editing so Docker-generated rules remain intact:
 
 ```bash
-sudo iptables-save | sudo tee /etc/iptables/rules.v4 > /dev/null
-sudo vim /etc/iptables/rules.v4
+sudo iptables-restore < /etc/iptables/rules.v4
 ```
 
 Use the following content for `/etc/iptables/rules.v4`:
