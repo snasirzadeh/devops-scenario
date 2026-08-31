@@ -17,16 +17,17 @@ From the repository root:
 
 ```bash
 mkdir -p logs
-sudo chown 101:101 logs
-sudo chmod 750 logs
 docker compose build
 docker compose run --rm nginx id
+sudo chown 101:101 logs
+sudo chmod 750 logs
 ```
 
-The host log directory must exist before the image is built and the container
-is started. UID and GID `101:101` allow the non-root Nginx process to write to
-the bind-mounted directory, while mode `750` limits access to its owner and
-group.
+The host log directory must exist before the container is started. In this
+image, the Nginx user uses UID and GID `101:101`. Verify those values with the
+`id` command before changing the ownership of `logs`. This ownership allows
+Nginx to write to the bind-mounted directory, while mode `750` limits access to
+its owner and group.
 
 ### Packet-capture capability
 
