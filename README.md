@@ -13,7 +13,7 @@
 
 ---
 
-### 2. [Build a lightweight, Dockerized web server.](docs/02-dockerfile-and-compose.md)
+### 2. [Build a lightweight, Dockerized web server.](docs/02-build-a-lightweight-dockerized-web-server.md)
 
 * **Purpose:** Build a lightweight, Dockerized web server.
 * **Base Image:** Use a lightweight base image and run the web server as a non-root user.
