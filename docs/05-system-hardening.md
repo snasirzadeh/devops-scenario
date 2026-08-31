@@ -83,16 +83,10 @@ The following is the persistent IPv4 ruleset for Node 1. Replace
 allows established traffic, loopback, HTTP, SSH on the selected non-default
 port, and VRRP (IP protocol 112) from Node 2.
 
-Docker creates the `DOCKER*` chains, bridge name, container address, and NAT
-rules shown below. Replace `<DOCKER_BRIDGE>`, `<DOCKER_SUBNET>`, and
-`<CONTAINER_IP>` with values reported by Docker. Apply and save this ruleset
-only after the Compose stack is running, and regenerate it if Docker recreates
-the network.
-
-Keep the current SSH session open while applying the rules so an error does not
-lock you out. Open the persistent configuration file:
+Save the active rules before editing so Docker-generated rules remain intact:
 
 ```bash
+sudo iptables-save | sudo tee /etc/iptables/rules.v4 > /dev/null
 sudo vim /etc/iptables/rules.v4
 ```
 
