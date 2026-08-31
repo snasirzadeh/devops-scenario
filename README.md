@@ -1,6 +1,6 @@
 ## Project Requirements Checklist
 
-### 1. [OS Initial, User, SSH & Docker Setup](docs/01-infrastructure-and-os-setup.md)
+### 1. [Infrastructure and OS Setup](docs/01-infrastructure-and-os-setup.md)
 
 * **Dual VM Setup:** Install 2 Linux VMs and setup LVM with 2 virtual disks each:
   * **Disk 1 (10GB):** Mounted on `/`
@@ -13,7 +13,7 @@
 
 ---
 
-### 2. [Dockerfile, Docker Compose & Mounts](docs/02-dockerfile-and-compose.md)
+### 2. [Build a lightweight, Dockerized web server.](docs/02-dockerfile-and-compose.md)
 
 * **Purpose:** Build a lightweight, Dockerized web server.
 * **Base Image:** Use a lightweight base image and run the web server as a non-root user.
