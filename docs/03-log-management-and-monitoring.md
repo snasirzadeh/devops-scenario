@@ -45,7 +45,7 @@ Install the normalized files:
 
 ```bash
 sudo chmod +x monitoring/monitor.sh
-sudo cp monitoring/monitor.sh /usr/local/bin/nginx-monitor.sh
+sudo cp monitoring/monitor.sh /usr/local/bin/monitor.sh
 sudo cp monitoring/nginx-monitor.service /etc/systemd/system/
 sudo cp monitoring/nginx-monitor.timer /etc/systemd/system/
 sudo systemctl daemon-reload
