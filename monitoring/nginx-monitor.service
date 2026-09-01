@@ -5,4 +5,4 @@ Description=Nginx daily log monitoring
 Type=oneshot
 User=debian
 Group=debian
-ExecStart=/home/user/devops-scenario/monitoring/nginx-monitor.sh
+ExecStart=/usr/local/bin/monitor.sh
