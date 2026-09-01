@@ -50,6 +50,6 @@
 
 ---
 
-### 6. [Why I Used Debian](docs/06-architectural-decisions.md#1-why-i-used-debian-13)
+### 6. [Architectural Decisions](docs/06-architectural-decisions.md)
 
-* **Debian:** Explain why Debian 13 was selected for this project.
+* **Design Rationale:** Explain the main technology and implementation choices made throughout the project.
