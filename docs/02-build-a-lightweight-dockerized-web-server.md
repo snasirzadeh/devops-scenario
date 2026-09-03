@@ -8,7 +8,7 @@ exposes only the required HTTP port through an isolated container network.
 
 The project requires a lightweight Dockerized web server but does not require a
 specific web-server product. This implementation uses Nginx with the
-`nginx:1.31.4-alpine` base image.
+`nginx:1.31.5-alpine` base image.
 
 The root `Dockerfile` installs the requested diagnostic tools without caching
 the Alpine package index, creates the non-root `nginx` user, changes ownership

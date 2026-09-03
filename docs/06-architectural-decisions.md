@@ -53,7 +53,7 @@ makes operational problems faster to diagnose.
 Nginx is also well suited to this project because it serves static content
 efficiently, has straightforward configuration, supports reverse proxying if
 the application grows, and runs with a small resource footprint. The
-`nginx:1.31.4-alpine` image combines those capabilities with a compact base
+`nginx:1.31.5-alpine` image combines those capabilities with a compact base
 image, which reduces image size and unnecessary packages. Other web servers
 could satisfy the requirements, but Nginx provides the best balance of
 familiarity, simplicity, performance, and maintainability for this deployment.
