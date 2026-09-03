@@ -31,7 +31,7 @@ vrrp_instance VI_1 {
     }
 
     track_script {
-        http-check
+        http_check
     }
 }
 
